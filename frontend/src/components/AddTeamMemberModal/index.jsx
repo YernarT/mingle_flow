@@ -1,21 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
 import { useSetState, useRequest } from 'ahooks';
 import { reqGetAllUsers, reqAddTeamMember } from '@/services/api/user-api';
 
-import {
-	Modal,
-	Select,
-	message as antdMessage,
-	Button,
-	Typography,
-} from 'antd';
+import { Modal, Select, message as antdMessage, Button } from 'antd';
 
 const { Option } = Select;
-const { Text } = Typography;
 
 export default function AddTeamMemberModal({
 	visible,
@@ -24,22 +17,17 @@ export default function AddTeamMemberModal({
 	team,
 }) {
 	const history = useHistory();
-	const [user, setUser] = useRecoilState(userAtom);
+	const setUser = useSetRecoilState(userAtom);
 	const [state, setState] = useSetState({
 		allUsers: [],
-		notInTeamUsers: [],
-		// notInTeamUsers Index
-		selectedUserIdx: -1,
+		selectedUsers: [],
 	});
 
 	// 获取所有用户 的请求
 	const { loading: loadingGetAllUser } = useRequest(reqGetAllUsers, {
-		onSuccess(users) {
+		onSuccess({ users }) {
 			setState({
 				allUsers: users,
-				notInTeamUsers: users.filter(
-					user => !user.enrolled_groups.includes(team.id),
-				),
 			});
 		},
 	});
@@ -54,19 +42,19 @@ export default function AddTeamMemberModal({
 
 	// 处理表单
 	const handleAddMember = () => {
-		if (state.selectedUserIdx === -1) {
-			antdMessage.warning('User needs to be selected');
+		if (!state.selectedUsers.length) {
+			antdMessage.warning('Пайдаланушыны таңдау керек');
 			return;
 		}
 
 		runAsync({
-			group_id: team.id,
-			username: state.notInTeamUsers[state.selectedUserIdx].username,
+			team_id: team.id,
+			members: state.selectedUsers,
 		})
-			.then(newMember => {
-				antdMessage.success('Added successfully');
+			.then(({ members }) => {
+				antdMessage.success('Сәтті қосылды');
 				onCancel();
-				afterAddTeamMember(newMember);
+				afterAddTeamMember(members);
 			})
 			.catch(({ message, needExecuteLogout, initialUser }) => {
 				antdMessage.error(message);
@@ -81,20 +69,24 @@ export default function AddTeamMemberModal({
 		<Modal
 			visible={visible}
 			onCancel={onCancel}
-			title="Add team member"
+			title="Команда мүшесін қосу"
 			footer={null}>
-			<Text>User</Text>
 			<Select
-				style={{ width: '100%', marginTop: '5px' }}
+				style={{ width: '100%' }}
 				loading={loadingGetAllUser}
-				onSelect={idx => {
-					setState({ selectedUserIdx: idx });
-				}}>
-				{state.notInTeamUsers.map((_user, idx) => (
-					<Option value={idx} key={_user.id}>
-						{_user.username} ({_user.level})
-					</Option>
-				))}
+				mode="multiple"
+				allowClear
+				onChange={value => {
+					setState({ selectedUsers: value });
+				}}
+				placeholder="Мүшелерді талдаңыз">
+				{state.allUsers
+					.filter(_user => !team.members.find(member => member.id === _user.id))
+					.map(_user => (
+						<Option value={_user.id} key={_user.id}>
+							{_user.username}
+						</Option>
+					))}
 			</Select>
 
 			<Button
@@ -103,7 +95,7 @@ export default function AddTeamMemberModal({
 				loading={loadingAddTeamMember}
 				style={{ marginTop: 24 }}
 				onClick={handleAddMember}>
-				Add
+				Қосу
 			</Button>
 		</Modal>
 	);

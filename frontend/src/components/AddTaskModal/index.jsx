@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
 import { useRequest } from 'ahooks';
@@ -25,7 +25,7 @@ export default function AddTaskModal({
 	team,
 }) {
 	const history = useHistory();
-	const [user, setUser] = useRecoilState(userAtom);
+	const setUser = useSetRecoilState(userAtom);
 
 	// 添加Task 的请求
 	const { runAsync, loading: loadingAddTask } = useRequest(
