@@ -17,7 +17,12 @@ import {
 	Empty,
 	Skeleton,
 } from 'antd';
-import { PlusOutlined, TeamOutlined } from '@ant-design/icons';
+import {
+	PlusOutlined,
+	TeamOutlined,
+	DollarCircleOutlined,
+	SendOutlined,
+} from '@ant-design/icons';
 import { CreateTeamModal } from '@/components';
 import {
 	UserProfileStyled,
@@ -187,19 +192,23 @@ export default function UserProfilePage() {
 				<div className="tasks">
 					<Card className="my-tasks" title="Мен құрған тапсырмалар">
 						<Skeleton active loading={loadingGetTasks}>
-							<TasksStyled
-								hasTask={Boolean(
-									state.tasks.filter(task => task.creator === user.id).length,
-								)}>
+							<TasksStyled>
 								{state.tasks
 									.filter(task => task.creator === user.id)
 									.map(task => (
-										<TaskItemStyled
-											key={task.id}
-											onClick={() => history.push('/task', { task: task })}>
-											<Title level={3} className="task-name">
-												{task.title}
-											</Title>
+										<TaskItemStyled key={task.id}>
+											<Card title={task.name}>
+												<Text strong>
+													<DollarCircleOutlined /> {task.funds} ₸
+												</Text>
+
+												<Button
+													icon={<SendOutlined />}
+													onClick={() => {
+														console.log(task.id);
+													}}
+												/>
+											</Card>
 										</TaskItemStyled>
 									))}
 
@@ -211,19 +220,23 @@ export default function UserProfilePage() {
 
 					<Card className="todo-tasks" title="Маған меншіктелген тапсырмалар">
 						<Skeleton active loading={loadingGetTasks}>
-							<TasksStyled
-								hasTask={Boolean(
-									state.tasks.filter(task => task.creator !== user.id).length,
-								)}>
+							<TasksStyled>
 								{state.tasks
 									.filter(task => task.creator !== user.id)
 									.map(task => (
-										<TaskItemStyled
-											key={task.id}
-											onClick={() => history.push('/task', { task: task })}>
-											<Title level={3} className="task-name">
-												{task.title}
-											</Title>
+										<TaskItemStyled key={task.id}>
+											<Card title={task.name}>
+												<Text strong>
+													<DollarCircleOutlined /> {task.funds} ₸
+												</Text>
+
+												<Button
+													icon={<SendOutlined />}
+													onClick={() => {
+														console.log(task.id);
+													}}
+												/>
+											</Card>
 										</TaskItemStyled>
 									))}
 

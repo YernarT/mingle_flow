@@ -21,7 +21,7 @@ export const TeamPageStyled = styled.div`
 		}
 
 		> * {
-			flex-basis: 50%;
+			flex: 0 0 50%;
 		}
 
 		.head {
@@ -39,9 +39,9 @@ export const MembersStyled = styled.ul`
 	${({ hasMember }) =>
 		hasMember
 			? `
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 10px;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 10px;
 		`
 			: `
 		display: flex;
@@ -60,13 +60,44 @@ export const TeamMemberStyled = styled.li`
 	flex-direction: column;
 	align-items: center;
 	gap: 4px;
+`;
 
-	.avatar {
-		width: 36px;
-		height: 36px;
-	}
+export const TasksStyled = styled.ul`
+	padding: 0;
+	margin: 0;
 
-	.username {
-		text-align: center;
+	max-height: 200px;
+	overflow: auto;
+	${scrollStyle}
+
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+`;
+
+export const TaskItemStyled = styled.li`
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+
+	.ant-card {
+		width: 100%;
+
+		.ant-card-body {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			::before,
+			::after {
+				display: none;
+			}
+		}
+
+		.anticon {
+			font-size: 1rem;
+		}
 	}
 `;

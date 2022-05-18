@@ -137,33 +137,38 @@ export const TasksStyled = styled.ul`
 	padding: 0;
 	margin: 0;
 
+	max-height: 200px;
+	overflow: auto;
+	${scrollStyle}
+
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	gap: 20px;
-
-	overflow: auto hidden;
-	${scrollStyle}
 `;
 
 export const TaskItemStyled = styled.li`
-	width: 100%;
-	padding: 8px 16px;
-	border: 1px solid #000;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
 
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-
-	&:hover {
-		background: aliceblue;
-	}
-
-	.task-name {
+	.ant-card {
 		width: 100%;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 
-		margin-bottom: 0;
+		.ant-card-body {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			::before,
+			::after {
+				display: none;
+			}
+		}
+
+		.anticon {
+			font-size: 1rem;
+		}
 	}
 `;

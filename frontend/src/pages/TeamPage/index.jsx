@@ -16,9 +16,19 @@ import {
 	Empty,
 	Skeleton,
 } from 'antd';
-import { PlusOutlined, DollarCircleOutlined } from '@ant-design/icons';
+import {
+	PlusOutlined,
+	DollarCircleOutlined,
+	SendOutlined,
+} from '@ant-design/icons';
 import { AddTeamMemberModal, AddTaskModal } from '@/components';
-import { TeamPageStyled, MembersStyled, TeamMemberStyled } from './style';
+import {
+	TeamPageStyled,
+	MembersStyled,
+	TeamMemberStyled,
+	TasksStyled,
+	TaskItemStyled,
+} from './style';
 
 const { Title, Text } = Typography;
 
@@ -78,31 +88,35 @@ export default function TeamPage() {
 						<div className="head">
 							<Title level={5}>Тапсырмалар</Title>
 
-							<Button onClick={() => setState({ addTaskModalVisibile: true })}>
-								<PlusOutlined />
-							</Button>
+							{thisMyTeam && (
+								<Button
+									onClick={() => setState({ addTaskModalVisibile: true })}>
+									<PlusOutlined />
+								</Button>
+							)}
 						</div>
 					}>
 					<Skeleton active loading={loadingGetTasks}>
-						<MembersStyled hasTasks={Boolean(state.tasks.length)}>
+						<TasksStyled>
 							{state.tasks.map(task => (
-								<TeamMemberStyled key={task.id}>
-									<Card
-										title={task.name}
-										style={{ cursor: 'pointer' }}
-										onClick={() => {
-											console.log(task.id);
-										}}>
+								<TaskItemStyled key={task.id}>
+									<Card title={task.name}>
 										<Text strong>
-											<DollarCircleOutlined style={{ fontSize: '1rem' }} />{' '}
-											{task.funds} ₸
+											<DollarCircleOutlined /> {task.funds} ₸
 										</Text>
+
+										<Button
+											icon={<SendOutlined />}
+											onClick={() => {
+												console.log(task.id);
+											}}
+										/>
 									</Card>
-								</TeamMemberStyled>
+								</TaskItemStyled>
 							))}
 
 							{state.tasks.length === 0 && <Empty description="Жоқ" />}
-						</MembersStyled>
+						</TasksStyled>
 					</Skeleton>
 
 					<AddTaskModal
@@ -123,10 +137,14 @@ export default function TeamPage() {
 						<div className="head">
 							<Title level={5}>Мүшелер</Title>
 
-							<Button
-								onClick={() => setState({ addTeamMemberModalVisibile: true })}>
-								<PlusOutlined />
-							</Button>
+							{thisMyTeam && (
+								<Button
+									onClick={() =>
+										setState({ addTeamMemberModalVisibile: true })
+									}>
+									<PlusOutlined />
+								</Button>
+							)}
 						</div>
 					}>
 					<Skeleton active loading={loadingGetMembers}>
@@ -142,6 +160,19 @@ export default function TeamPage() {
 							{state.members.length === 0 && <Empty description="Жоқ" />}
 						</MembersStyled>
 					</Skeleton>
+
+					<AddTeamMemberModal
+						visible={state.addTeamMemberModalVisibile}
+						onCancel={() => {
+							setState({ addTeamMemberModalVisibile: false });
+						}}
+						team={state.team}
+						afterAddTeamMember={members => {
+							setState(prevState => ({
+								members: [...prevState.members, ...members],
+							}));
+						}}
+					/>
 				</Card>
 			</div>
 		</TeamPageStyled>
