@@ -110,8 +110,9 @@ export default function TeamPage() {
 						onCancel={() => setState({ addTaskModalVisibile: false })}
 						team={state.team}
 						afterAddTask={task => {
-							console.log(task);
-							setState(prevState => [...prevState.tasks, task]);
+							setState(prevState => ({
+								tasks: [...prevState.tasks, task],
+							}));
 						}}
 					/>
 				</Card>

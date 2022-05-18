@@ -42,24 +42,23 @@ export default function AddTaskModal({
 			description: values.description,
 			start_time: values['time-range'][0].format('YYYY-MM-DD HH:mm:ss'),
 			end_time: values['time-range'][1].format('YYYY-MM-DD HH:mm:ss'),
+			funds: values.funds,
 			team: team.id,
 		};
 
-		antdMessage.warning('Дайын емес функция');
-
-		// runAsync(data)
-		// 	.then(({ message, task }) => {
-		// 		antdMessage.success(message);
-		// 		onCancel();
-		// 		afterAddTask(task);
-		// 	})
-		// 	.catch(({ message, needExecuteLogout, initialUser }) => {
-		// 		antdMessage.error(message);
-		// 		if (needExecuteLogout) {
-		// 			setUser(initialUser);
-		// 			history.push('/login');
-		// 		}
-		// 	});
+		runAsync(data)
+			.then(({ message, task }) => {
+				antdMessage.success(message);
+				onCancel();
+				afterAddTask(task);
+			})
+			.catch(({ message, needExecuteLogout, initialUser }) => {
+				antdMessage.error(message);
+				if (needExecuteLogout) {
+					setUser(initialUser);
+					history.push('/login');
+				}
+			});
 	};
 
 	return (
