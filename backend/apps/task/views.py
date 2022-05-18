@@ -16,14 +16,12 @@ class TaskAPI(API_View):
 
         _, tasks_model = self.get_base_query_set(
             request, task_list_serializer)
-        
+
         params = self.get_params(request)['params']
         team_id = params.get('team_id')
 
         if team_id:
             tasks_model = tasks_model.filter(team=Team.objects.get(id=team_id))
-        else:
-            tasks_model = []
 
         tasks_model = task_list_serializer(request, tasks_model)
 
@@ -38,8 +36,10 @@ class TaskAPI(API_View):
 
         from datetime import datetime
         data = self.get_data(request)
-        data['start_time'] = datetime.strptime(data['start_time'], '%Y-%m-%d %H:%M:%S')
-        data['end_time'] = datetime.strptime(data['end_time'], '%Y-%m-%d %H:%M:%S')
+        data['start_time'] = datetime.strptime(
+            data['start_time'], '%Y-%m-%d %H:%M:%S')
+        data['end_time'] = datetime.strptime(
+            data['end_time'], '%Y-%m-%d %H:%M:%S')
         data['creator'] = user['model']
         data['team'] = Team.objects.get(id=data['team'])
 

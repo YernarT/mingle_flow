@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 
 from user.models import User
-from user.serializer import user_serializer
+from user.serializer import user_list_serializer, user_serializer
 
 from utils.auth import get_jwt
 from utils.request_middleware import API_View
@@ -59,6 +59,12 @@ class RegisterAPI(API_View):
 class UserAPI(API_View):
     model_cls = User
     query_set = User.objects.all()
+
+    def get(self, request):
+        serialized_users, _ = self.get_base_query_set(
+            request, user_list_serializer)
+        
+        return JsonResponse({'users': serialized_users}, status=200)
 
     def put(self, request):
 

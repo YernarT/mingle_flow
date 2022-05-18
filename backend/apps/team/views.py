@@ -62,15 +62,33 @@ class TeamMemberAPI(API_View):
         team_id = params.get('team_id')
 
         if team_id:
-            members_model = members_model.filter(team=Team.objects.get(id=team_id))
+            members_model = members_model.filter(
+                team=Team.objects.get(id=team_id))
         else:
             members_model = []
 
         members = [user_serializer(request, member_model.member)
-                       for member_model in members_model]
+                   for member_model in members_model]
 
         return JsonResponse({'members': members}, status=200)
 
     def post(self, request):
 
-        pass
+        try:
+            _ = self.get_user(request)
+        except (UnauthorizedError) as e:
+            return JsonResponse(**e.response_context)
+
+        data = self.get_data(request)
+        team_id = data['team_id']
+        members = data['members']
+
+        team = Team.objects.get(id=team_id)
+        team_members = []
+        for member in members:
+            team_member_model = self.model_cls.objects.create(
+                team=team, member=User.objects.get(id=member))
+            team_members.append(user_serializer(
+                request, team_member_model.member))
+
+        return JsonResponse({'members': team_members}, status=200)
