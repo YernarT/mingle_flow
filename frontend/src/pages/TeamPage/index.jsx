@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userAtom } from '@/store';
 
 import { reqGetTeamTask, reqGetTeamMembers } from '@/services/api/user-api';
@@ -8,7 +8,7 @@ import { useSetState, useRequest, useCreation } from 'ahooks';
 import { useAuth } from '@/hooks';
 
 import {
-	message as antdMessage,
+	// message as antdMessage,
 	Button,
 	Avatar,
 	Typography,
@@ -33,7 +33,7 @@ import {
 const { Title, Text } = Typography;
 
 export default function TeamPage() {
-	const [user, setUser] = useRecoilState(userAtom);
+	const user = useRecoilValue(userAtom);
 	const history = useHistory();
 
 	// 授权校验
@@ -108,7 +108,7 @@ export default function TeamPage() {
 										<Button
 											icon={<SendOutlined />}
 											onClick={() => {
-												console.log(task.id);
+												history.push('/task', { task });
 											}}
 										/>
 									</Card>

@@ -17,8 +17,6 @@ import {
 	Typography,
 	Space,
 	Empty,
-	Row,
-	Col,
 	Card,
 } from 'antd';
 import { AddSubmissionModal } from '@/components';
@@ -41,30 +39,30 @@ export default function TaskPage() {
 	});
 
 	// 获取所有 Submission
-	useRequest(() => reqGetAllSubmission(state.task.id), {
-		onSuccess(submissions) {
-			setState({ submissions });
-		},
-	});
+	// useRequest(() => reqGetAllSubmission(state.task.id), {
+	// 	onSuccess(submissions) {
+	// 		setState({ submissions });
+	// 	},
+	// });
 
 	// MarkDone 请求
-	const { runAsync, loading } = useRequest(
-		data => reqMarkDoneSubmission(data),
-		{
-			manual: true,
-		},
-	);
+	// const { runAsync, loading } = useRequest(
+	// 	data => reqMarkDoneSubmission(data),
+	// 	{
+	// 		manual: true,
+	// 	},
+	// );
 
 	// 处理 mark done
-	const handleMarkDone = submission => {
-		runAsync({ status_id: submission.id }).then(() => {
-			setState(prevState => ({
-				submissions: prevState.submissions.filter(
-					_submission => _submission.id !== submission.id,
-				),
-			}));
-		});
-	};
+	// const handleMarkDone = submission => {
+	// 	runAsync({ status_id: submission.id }).then(() => {
+	// 		setState(prevState => ({
+	// 			submissions: prevState.submissions.filter(
+	// 				_submission => _submission.id !== submission.id,
+	// 			),
+	// 		}));
+	// 	});
+	// };
 
 	return (
 		<>
@@ -116,9 +114,9 @@ export default function TaskPage() {
 													<a href={submission.file_path}>File</a>
 
 													<Button
-														loading={loading}
+														// loading={loading}
 														onClick={() => {
-															handleMarkDone(submission);
+															// handleMarkDone(submission);
 														}}>
 														Mark done
 													</Button>

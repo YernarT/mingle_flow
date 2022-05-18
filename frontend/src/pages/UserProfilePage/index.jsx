@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { userAtom } from '@/store';
 
 import { reqGetTeams, reqGetTasks } from '@/services/api/user-api';
@@ -35,7 +35,7 @@ import {
 const { Title, Text } = Typography;
 
 export default function UserProfilePage() {
-	const [user, setUser] = useRecoilState(userAtom);
+	const user = useRecoilValue(userAtom);
 	const history = useHistory();
 
 	// 授权校验
@@ -205,7 +205,7 @@ export default function UserProfilePage() {
 												<Button
 													icon={<SendOutlined />}
 													onClick={() => {
-														console.log(task.id);
+														history.push('/task', { task });
 													}}
 												/>
 											</Card>
@@ -233,7 +233,7 @@ export default function UserProfilePage() {
 												<Button
 													icon={<SendOutlined />}
 													onClick={() => {
-														console.log(task.id);
+														history.push('/task', { task });
 													}}
 												/>
 											</Card>
