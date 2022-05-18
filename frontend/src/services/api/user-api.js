@@ -15,6 +15,9 @@ export const reqUploadAvatar = avatar =>
 		},
 	});
 
+// Get All users
+export const reqGetAllUsers = () => apiServerInstance.get('/user/');
+
 /**
  * Team related ↓
  */
@@ -28,6 +31,10 @@ export const reqCreateTeam = data => apiServerInstance.post('/team/', data);
 // Get Team Members
 export const reqGetTeamMembers = teamId =>
 	apiServerInstance.get(`/team_member/?team_id=${teamId}`);
+
+// Add Team Member
+export const reqAddTeamMember = data =>
+	apiServerInstance.post('/team_member/', data);
 
 /**
  * Task related ↓
@@ -47,13 +54,6 @@ export const reqAddTask = data => apiServerInstance.post('/task/', data);
 // sss
 // sss
 // sss
-
-// Get All users
-export const reqGetAllUsers = () => apiServerInstance.get('/all_users/');
-
-// Add Team Member
-export const reqAddTeamMember = data =>
-	apiServerInstance.post('/add_member/', data);
 
 // Add TaskSubmission
 export const reqAddTaskSubmission = data =>
