@@ -46,3 +46,45 @@ class TaskAPI(API_View):
         model_obj = self.model_cls.objects.create(**data)
 
         return JsonResponse({'task': task_serializer(request, model_obj), 'message': 'Сәтті жарияланды'}, status=201)
+
+
+class TaskResultAPI(API_View):
+    model_cls = TaskResult
+    query_set = TaskResult.objects.all()
+
+    def get(self, request):
+        _, task_results_model = self.get_base_query_set(
+            request, task_result_list_serializer)
+
+        params = self.get_params(request)['params']
+        task_id = params.get('task_id')
+
+        if task_id:
+            task_results_model = task_results_model.filter(
+                task=Task.objects.get(id=task_id))
+
+        task_results = task_result_list_serializer(
+            request, task_results_model)
+
+        return JsonResponse({'submissions': task_results}, status=200)
+
+    def post(self, request):
+
+        try:
+            user = self.get_user(request)['model']
+        except (UnauthorizedError) as e:
+            return JsonResponse(**e.response_context)
+
+        file = request.FILES.get('file')
+        task_id = request.POST.get('task_id')
+        task = Task.objects.get(id=task_id)
+
+        if not file:
+            return JsonResponse({
+                'message': 'Файлді жүктеу керек'
+            }, status=400)
+
+        self.model_cls.objects.create(
+            task=task, file=file, submitter=user, submitted=True, finished=False)
+
+        return JsonResponse({}, status=201)

@@ -1,12 +1,10 @@
 from django.conf.urls import url
-from task.views import TaskAPI
+from task.views import TaskAPI, TaskResultAPI
 
 
 urlpatterns = [
     url(r'^task/$', TaskAPI.as_view()),
-
-    #     url(r'^user/notification/$', NotificationView.as_view()),
-    #     url(r'^user/notification/(?P<id>\d+)/$', NotificationSingleView.as_view()),
+    url(r'^task/submission/$', TaskResultAPI.as_view()),
 ]
 
 app_name = 'task'
