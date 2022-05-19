@@ -47,7 +47,6 @@ export const SubmissionList = styled.ul`
 
 			.username,
 			.avatar {
-				cursor: pointer;
 			}
 
 			.username {
@@ -60,6 +59,16 @@ export const SubmissionList = styled.ul`
 				gap: 20px;
 
 				margin-left: auto;
+			}
+
+			@media screen and (max-width: 900px) {
+				flex-direction: column;
+
+				.more {
+					flex-direction: column;
+					margin: auto;
+					gap: 8px;
+				}
 			}
 		}
 	}

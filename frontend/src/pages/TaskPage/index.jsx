@@ -58,26 +58,27 @@ export default function TaskPage() {
 		},
 	});
 
-	console.log(state.submissions);
-
 	// MarkDone 请求
-	// const { runAsync, loading } = useRequest(
-	// 	data => reqMarkDoneSubmission(data),
-	// 	{
-	// 		manual: true,
-	// 	},
-	// );
+	const { runAsync, loading } = useRequest(
+		data => reqMarkDoneSubmission(data),
+		{
+			manual: true,
+		},
+	);
 
 	// 处理 mark done
-	// const handleMarkDone = submission => {
-	// 	runAsync({ status_id: submission.id }).then(() => {
-	// 		setState(prevState => ({
-	// 			submissions: prevState.submissions.filter(
-	// 				_submission => _submission.id !== submission.id,
-	// 			),
-	// 		}));
-	// 	});
-	// };
+	const handleMarkDone = submission => {
+		runAsync({ submission_id: submission.id }).then(({ submission }) => {
+			setState(prevState => ({
+				submissions: [
+					...prevState.submissions.filter(
+						_submission => _submission.id !== submission.id,
+					),
+					submission,
+				],
+			}));
+		});
+	};
 
 	return (
 		<TaskPageStyled>
@@ -125,37 +126,38 @@ export default function TaskPage() {
 			</Card>
 
 			{state.task.creator === user.id && (
-				<Card>
+				<Card title="Тапсырылған тапсырмалар">
 					<SubmissionList>
-						{state.submissions
-							.filter(submission => !submission.finished)
-							.map(submission => (
-								<li className="submission-wrap" key={submission.id}>
-									<Card>
-										<div className="submission">
-											<Avatar src={submission.user.avatar} className="avatar" />
-											<Title level={5} className="username">
-												{submission.user.username}
-											</Title>
+						{state.submissions.map(submission => (
+							<li className="submission-wrap" key={submission.id}>
+								<Card>
+									<div className="submission">
+										<Avatar
+											src={submission.submitter.avatar}
+											className="avatar"
+										/>
+										<Title level={5} className="username">
+											{submission.submitter.username}
+										</Title>
 
-											<div className="more">
-												<a href={submission.file_path}>File</a>
+										<div className="more">
+											<a href={submission.file}>Файл</a>
 
-												<Button
-													// loading={loading}
-													onClick={() => {
-														// handleMarkDone(submission);
-													}}>
-													Mark done
-												</Button>
-											</div>
+											<Button
+												loading={loading}
+												disabled={submission.finished}
+												onClick={() => {
+													handleMarkDone(submission);
+												}}>
+												Орындалды деп белгілеу
+											</Button>
 										</div>
-									</Card>
-								</li>
-							))}
+									</div>
+								</Card>
+							</li>
+						))}
 
-						{state.submissions.filter(submission => !submission.finished)
-							.length === 0 && (
+						{state.submissions.length === 0 && (
 							<Empty description="Тапсырылған тапсырмалар жоқ" />
 						)}
 					</SubmissionList>

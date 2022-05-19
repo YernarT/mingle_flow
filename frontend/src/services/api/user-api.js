@@ -64,4 +64,4 @@ export const reqAddTaskSubmission = data =>
 
 // Mark done submission
 export const reqMarkDoneSubmission = data =>
-	apiServerInstance.post('/mark_done/', data);
+	apiServerInstance.put('/task/submission/', data);
