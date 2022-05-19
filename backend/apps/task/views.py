@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from task.models import Task, TaskResult
 from task.serializer import task_serializer, task_list_serializer, task_result_serializer, task_result_list_serializer
 from team.models import Team
+from user.serializer import user_serializer
 
 from utils.request_middleware import API_View
 from utils.error import UnauthorizedError
@@ -63,8 +64,12 @@ class TaskResultAPI(API_View):
             task_results_model = task_results_model.filter(
                 task=Task.objects.get(id=task_id))
 
-        task_results = task_result_list_serializer(
-            request, task_results_model)
+        task_results = []
+        for task_result_model in task_results_model:
+            task_result = task_result_serializer(request, task_result_model)
+            task_result['submitter'] = user_serializer(
+                request, task_result_model.submitter)
+            task_results.append(task_result)
 
         return JsonResponse({'submissions': task_results}, status=200)
 
@@ -88,3 +93,22 @@ class TaskResultAPI(API_View):
             task=task, file=file, submitter=user, submitted=True, finished=False)
 
         return JsonResponse({}, status=201)
+
+    def put(self, request):
+
+        try:
+            _ = self.get_user(request)['model']
+        except (UnauthorizedError) as e:
+            return JsonResponse(**e.response_context)
+
+        data = self.get_data(request)
+        submission_id = data['submission_id']
+
+        task_result_model = self.model_cls.objects.get(id=submission_id)
+        task_result_model.finished = True
+        task_result_model.save()
+
+        task_result = task_result_serializer(request, task_result_model)
+        task_result['submitter'] = user_serializer(request, task_result_model.submitter)
+
+        return JsonResponse({'submission': task_result}, status=200)
