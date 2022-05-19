@@ -50,22 +50,17 @@ export const reqGetTeamTask = teamId =>
 // Add Task
 export const reqAddTask = data => apiServerInstance.post('/task/', data);
 
-// sss
-// sss
-// sss
-// sss
+// Get All Submission
+export const reqGetAllSubmission = taskId =>
+	apiServerInstance.get(`/task/submission/?task_id=${taskId}`);
 
 // Add TaskSubmission
 export const reqAddTaskSubmission = data =>
-	apiServerInstance.post('/upload_file/', data, {
+	apiServerInstance.post('/task/submission/', data, {
 		headers: {
 			'Content-Type': 'multipart/form-data',
 		},
 	});
-
-// Get All Submission
-export const reqGetAllSubmission = taskId =>
-	apiServerInstance.get(`/get_submissions/?task_id=${taskId}`);
 
 // Mark done submission
 export const reqMarkDoneSubmission = data =>

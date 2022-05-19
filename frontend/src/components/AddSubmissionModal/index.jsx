@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import {  useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
 import { useRequest, useSetState } from 'ahooks';
@@ -16,7 +16,7 @@ export default function AddSubmissionModal({
 	task,
 }) {
 	const history = useHistory();
-	const [user, setUser] = useRecoilState(userAtom);
+	const setUser = useSetRecoilState(userAtom);
 	const [state, setState] = useSetState({
 		file: null,
 	});
@@ -30,9 +30,9 @@ export default function AddSubmissionModal({
 	);
 
 	// 处理表单
-	const handleSubmit = values => {
+	const handleSubmit = () => {
 		if (!state.file) {
-			antdMessage.warning('A file must be selected');
+			antdMessage.warning('Файлды таңдау керек');
 			return;
 		}
 
@@ -42,7 +42,7 @@ export default function AddSubmissionModal({
 
 		runAsync(formData)
 			.then(() => {
-				antdMessage.success('Uploaded successfully');
+				antdMessage.success('Сәтті жүктеп салынды');
 				setState({ file: null });
 				onCancel();
 				afterAddSubmission();
@@ -61,7 +61,7 @@ export default function AddSubmissionModal({
 		<Modal
 			visible={visible}
 			onCancel={onCancel}
-			title="Add Submission"
+			title="Тапсырма жүктеу"
 			footer={null}>
 			<Form onFinish={handleSubmit} autoComplete="off" layout="vertical">
 				<Form.Item>
@@ -74,13 +74,13 @@ export default function AddSubmissionModal({
 								setState({ file });
 								return false;
 							}}
-							onRemove={file => {
+							onRemove={() => {
 								setState({ file: null });
 							}}>
 							<p className="ant-upload-drag-icon">
 								<InboxOutlined />
 							</p>
-							<p className="ant-upload-text">Submission file</p>
+							<p className="ant-upload-text">Тапсыратын файл</p>
 						</Upload.Dragger>
 					</Form.Item>
 				</Form.Item>
@@ -90,7 +90,7 @@ export default function AddSubmissionModal({
 					htmlType="submit"
 					block
 					loading={loadingAddSubmission}>
-					Upload
+					Жүктеу
 				</Button>
 			</Form>
 		</Modal>

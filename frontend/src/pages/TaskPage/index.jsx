@@ -51,14 +51,14 @@ export default function TaskPage() {
 		return `${year}-${month}-${day} ${hour}:${minute}`;
 	});
 
-	console.log(state.task);
-
 	// 获取所有 Submission
-	// useRequest(() => reqGetAllSubmission(state.task.id), {
-	// 	onSuccess(submissions) {
-	// 		setState({ submissions });
-	// 	},
-	// });
+	useRequest(() => reqGetAllSubmission(state.task.id), {
+		onSuccess({ submissions }) {
+			setState({ submissions });
+		},
+	});
+
+	console.log(state.submissions);
 
 	// MarkDone 请求
 	// const { runAsync, loading } = useRequest(
@@ -80,93 +80,87 @@ export default function TaskPage() {
 	// };
 
 	return (
-		<>
-			<TaskPageStyled>
-				<Title level={2} className="title">
-					{state.task.name}
-				</Title>
+		<TaskPageStyled>
+			<Title level={2} className="title">
+				{state.task.name}
+			</Title>
 
-				<Card className="task-data">
-					<Space className="header">
-						<Space direction="vertical" size="small">
-							<Text>Бастау уақыт: {formatDate(state.task.start_time)}</Text>
-							<Text>Аяқтау уақыт: {formatDate(state.task.start_time)}</Text>
-						</Space>
-
-						<Text>Қаржы {state.task.funds} ₸</Text>
+			<Card className="task-data">
+				<Space className="header">
+					<Space direction="vertical" size="small">
+						<Text>Бастау уақыт: {formatDate(state.task.start_time)}</Text>
+						<Text>Аяқтау уақыт: {formatDate(state.task.start_time)}</Text>
 					</Space>
 
-					<Descriptions title="Тапсырма сипаттамасы">
-						<Descriptions.Item>
-							{state.task.description || 'Сипаттама жоқ'}
-						</Descriptions.Item>
-					</Descriptions>
+					<Text>Қаржы {state.task.funds} ₸</Text>
+				</Space>
 
-					{state.task.creator !== user.id && (
-						<Button
-							block
-							type="primary"
-							style={{ marginTop: '15px' }}
-							onClick={() => setState({ addSubmissionModalVisible: true })}>
-							Тапсырманы жіберу
-						</Button>
-					)}
-				</Card>
+				<Descriptions title="Тапсырма сипаттамасы">
+					<Descriptions.Item>
+						{state.task.description || 'Сипаттама жоқ'}
+					</Descriptions.Item>
+				</Descriptions>
 
-				{state.task.creator === user.id && (
-					<Card>
-						<SubmissionList>
-							{state.submissions
-								.filter(submission => !submission.finished)
-								.map(submission => (
-									<li className="submission-wrap" key={submission.id}>
-										<Card>
-											<div className="submission">
-												<Avatar
-													src={submission.user.avatar}
-													className="avatar"
-												/>
-												<Title level={5} className="username">
-													{submission.user.username}
-												</Title>
-
-												<div className="more">
-													<a href={submission.file_path}>File</a>
-
-													<Button
-														// loading={loading}
-														onClick={() => {
-															// handleMarkDone(submission);
-														}}>
-														Mark done
-													</Button>
-												</div>
-											</div>
-										</Card>
-									</li>
-								))}
-
-							{state.submissions.filter(submission => !submission.finished)
-								.length === 0 && (
-								<Empty description="Тапсырылған тапсырмалар жоқ" />
-							)}
-						</SubmissionList>
-					</Card>
+				{state.task.creator !== user.id && (
+					<Button
+						block
+						type="primary"
+						style={{ marginTop: '15px' }}
+						onClick={() => setState({ addSubmissionModalVisible: true })}>
+						Тапсырманы жіберу
+					</Button>
 				)}
-			</TaskPageStyled>
 
-			{/* {state.task.creator.id !== user.id && (
-				<AddSubmissionModal
-					visible={state.addSubmissionModalVisible}
-					onCancel={() => setState({ addSubmissionModalVisible: false })}
-					task={state.task}
-					afterAddSubmission={() => {
-						setState({ addSubmissionModalVisible: false });
-						antdMessage.success('Uploaded successfully');
-						history.goBack();
-					}}
-				/>
-			)} */}
-		</>
+				{state.task.creator.id !== user.id && (
+					<AddSubmissionModal
+						visible={state.addSubmissionModalVisible}
+						onCancel={() => setState({ addSubmissionModalVisible: false })}
+						task={state.task}
+						afterAddSubmission={() => {
+							setState({ addSubmissionModalVisible: false });
+							history.goBack();
+						}}
+					/>
+				)}
+			</Card>
+
+			{state.task.creator === user.id && (
+				<Card>
+					<SubmissionList>
+						{state.submissions
+							.filter(submission => !submission.finished)
+							.map(submission => (
+								<li className="submission-wrap" key={submission.id}>
+									<Card>
+										<div className="submission">
+											<Avatar src={submission.user.avatar} className="avatar" />
+											<Title level={5} className="username">
+												{submission.user.username}
+											</Title>
+
+											<div className="more">
+												<a href={submission.file_path}>File</a>
+
+												<Button
+													// loading={loading}
+													onClick={() => {
+														// handleMarkDone(submission);
+													}}>
+													Mark done
+												</Button>
+											</div>
+										</div>
+									</Card>
+								</li>
+							))}
+
+						{state.submissions.filter(submission => !submission.finished)
+							.length === 0 && (
+							<Empty description="Тапсырылған тапсырмалар жоқ" />
+						)}
+					</SubmissionList>
+				</Card>
+			)}
+		</TaskPageStyled>
 	);
 }
