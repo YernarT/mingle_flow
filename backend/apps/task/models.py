@@ -34,6 +34,8 @@ class TaskResult(models.Model):
         'user.User', on_delete=models.CASCADE, verbose_name='Тапсырушы')
     submitted = models.BooleanField(default=False, verbose_name='Орындалды')
     finished = models.BooleanField(default=False, verbose_name='Аяқталды')
+    submitted_time = models.DateTimeField(
+        auto_now_add=True, verbose_name='Тапсыған уақыт')
 
     class Meta:
         db_table = 'task_result'

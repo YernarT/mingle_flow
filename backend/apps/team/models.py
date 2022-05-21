@@ -23,6 +23,8 @@ class TeamMember(models.Model):
 
     team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='Команда')
     member = models.ForeignKey('user.User', on_delete=models.CASCADE, verbose_name='Мүше')
+    join_time = models.DateTimeField(
+        auto_now_add=True, verbose_name='Қосылған уақыт')
 
     class Meta:
         db_table = 'team_member'
