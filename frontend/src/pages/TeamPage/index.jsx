@@ -75,10 +75,26 @@ export default function TeamPage() {
 		},
 	);
 
+	// 显示报告
+	const handleShowReport = () => {
+		// get data from api
+	};
+
 	return (
 		<TeamPageStyled>
 			<Card title={state.team.name} className="team-basic-info">
 				<Text>{state.team.description || 'Сипаттама жоқ'}</Text>
+
+				<div
+					style={{
+						marginTop: '20px',
+						display: 'flex',
+						justifyContent: 'flex-end',
+					}}>
+					<Button type="primary" onClick={handleShowReport}>
+						Отчет
+					</Button>
+				</div>
 			</Card>
 
 			<div className="box">
