@@ -77,9 +77,9 @@ export default function TeamPage() {
 
 	return (
 		<TeamPageStyled>
-			<Title level={2} className="team-name">
-				{state.team.name}
-			</Title>
+			<Card title={state.team.name} className="team-basic-info">
+				<Text>{state.team.description}</Text>
+			</Card>
 
 			<div className="box">
 				<Card

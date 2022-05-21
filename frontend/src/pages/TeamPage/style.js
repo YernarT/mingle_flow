@@ -2,14 +2,8 @@ import styled from 'styled-components';
 import { scrollStyle } from '@/assets/style';
 
 export const TeamPageStyled = styled.div`
-	.team-name {
-		text-align: center;
-		width: 100%;
-		display: block;
-
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	.team-basic-info {
+		margin-bottom: 36px;
 	}
 
 	.box {
@@ -21,7 +15,7 @@ export const TeamPageStyled = styled.div`
 		}
 
 		> * {
-			flex: 0 0 50%;
+			flex: 0 0 calc(50% - 10px);
 		}
 
 		.head {
