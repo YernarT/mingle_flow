@@ -31,8 +31,12 @@ def user_pre_save(sender, instance, **kwargs):
         instance.password = make_password(instance.password)
 
     '''Пайдаланушыны сақтамас бұрын ескі аватарын жою'''
-    user = sender.objects.get(id=instance.id)
-    if user.avatar != instance.avatar:
+    try:
+        user = sender.objects.get(id=instance.id)
+    except sender.DoesNotExist:
+        user = False
+    
+    if user and user.avatar != instance.avatar:
         user.avatar.delete(save=False)
 
 

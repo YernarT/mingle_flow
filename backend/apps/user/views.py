@@ -42,7 +42,7 @@ class RegisterAPI(API_View):
 
         try:
             have_same_username_user = self.query_set.get(username=username)
-        except User.DoesNotExist:
+        except self.model_cls.DoesNotExist:
             have_same_username_user = False
 
         if have_same_username_user:
