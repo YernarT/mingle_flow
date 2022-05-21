@@ -78,7 +78,7 @@ export default function TeamPage() {
 	return (
 		<TeamPageStyled>
 			<Card title={state.team.name} className="team-basic-info">
-				<Text>{state.team.description}</Text>
+				<Text>{state.team.description || 'Сипаттама жоқ'}</Text>
 			</Card>
 
 			<div className="box">

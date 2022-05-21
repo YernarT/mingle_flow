@@ -56,7 +56,7 @@ export const HeaderStyledBox = styled(Header)`
 	padding-top: 10px !important;
 	padding-bottom: 10px !important;
 	background: inherit;
-	box-shadow: 0 3px 6px #1890ff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 
 	position: relative;
 
