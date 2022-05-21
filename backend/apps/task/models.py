@@ -5,7 +5,7 @@ class Task(models.Model):
 
     name = models.CharField(max_length=40, verbose_name='Тапсырма атауы')
     description = models.CharField(
-        max_length=254, null=True, verbose_name='Тапсырма сипаттамасы')
+        max_length=254, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
     start_time = models.DateTimeField(verbose_name='Бастау уақыт')
     end_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
     funds = models.PositiveIntegerField(verbose_name='Бөлінген қаржы')
