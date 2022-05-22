@@ -15,10 +15,10 @@ export default function ShowReportModal({ visible, onCancel }) {
 	const formatDate = useMemoizedFn(dateString => {
 		let date = new Date(dateString);
 		let year = date.getFullYear();
-		let month = date.getMonth();
-		let day = date.getDay();
+		let month = date.getMonth() + 1;
+		let day = date.getDay() + 1;
 		let hour = date.getHours();
-		let minute = date.getMinutes();
+		let minute = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 
 		return `${year}-${month}-${day} ${hour}:${minute}`;
 	});
