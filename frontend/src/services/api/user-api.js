@@ -65,3 +65,6 @@ export const reqAddTaskSubmission = data =>
 // Mark done submission
 export const reqMarkDoneSubmission = data =>
 	apiServerInstance.put('/task/submission/', data);
+
+// Get report
+export const reqGetReport = () => apiServerInstance.get('/task/report/');

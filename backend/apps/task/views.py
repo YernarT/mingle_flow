@@ -112,3 +112,21 @@ class TaskResultAPI(API_View):
         task_result['submitter'] = user_serializer(request, task_result_model.submitter)
 
         return JsonResponse({'submission': task_result}, status=200)
+
+
+
+
+class TaskReportAPI(API_View):
+    model_cls = Task
+    query_set = Task.objects.all()
+
+    def get(self, request):
+        
+        tasks_model = self.query_set.order_by('start_time')
+        tasks = task_list_serializer(request, tasks_model)
+
+        for idx, task_model in enumerate(tasks_model):
+            task_results_model = task_model.taskresult_set.all()
+            tasks[idx]['results'] = task_result_list_serializer(request, task_results_model)
+
+        return JsonResponse({'tasks': tasks}, status=200)

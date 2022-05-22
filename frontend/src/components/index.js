@@ -7,3 +7,4 @@ export { default as CreateTeamModal } from './CreateTeamModal';
 export { default as AddTeamMemberModal } from './AddTeamMemberModal';
 export { default as AddTaskModal } from './AddTaskModal';
 export { default as AddSubmissionModal } from './AddSubmissionModal';
+export { default as ShowReportModal } from './ShowReportModal';

@@ -21,7 +21,11 @@ import {
 	DollarCircleOutlined,
 	SendOutlined,
 } from '@ant-design/icons';
-import { AddTeamMemberModal, AddTaskModal } from '@/components';
+import {
+	AddTeamMemberModal,
+	AddTaskModal,
+	ShowReportModal,
+} from '@/components';
 import {
 	TeamPageStyled,
 	MembersStyled,
@@ -47,6 +51,7 @@ export default function TeamPage() {
 
 		addTeamMemberModalVisibile: false,
 		addTaskModalVisibile: false,
+		showReportVisible: false,
 	});
 
 	// 当前用户是否是群主 (Team creator)
@@ -75,11 +80,6 @@ export default function TeamPage() {
 		},
 	);
 
-	// 显示报告
-	const handleShowReport = () => {
-		// get data from api
-	};
-
 	return (
 		<TeamPageStyled>
 			<Card title={state.team.name} className="team-basic-info">
@@ -91,9 +91,20 @@ export default function TeamPage() {
 						display: 'flex',
 						justifyContent: 'flex-end',
 					}}>
-					<Button type="primary" onClick={handleShowReport}>
+					<Button
+						type="primary"
+						onClick={() => {
+							setState({ showReportVisible: true });
+						}}>
 						Отчет
 					</Button>
+
+					<ShowReportModal
+						visible={state.showReportVisible}
+						onCancel={() => {
+							setState({ showReportVisible: false });
+						}}
+					/>
 				</div>
 			</Card>
 
