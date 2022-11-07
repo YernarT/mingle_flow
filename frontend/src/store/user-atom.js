@@ -1,9 +1,5 @@
-/**
- * 用户相关全局状态
- */
-
 import { atom } from 'recoil';
-import { getLatestState, localStorage } from '@/utils';
+import { localStorage } from '@/utils';
 
 export const defaultUserState = {
 	id: null,
@@ -16,15 +12,7 @@ export const defaultUserState = {
 	token: '',
 };
 
-const [isValid, state] = getLatestState(
-	localStorage.get('user', {}),
-	defaultUserState,
-);
-
-// LocalStorage内数据"过期"
-if (!isValid) {
-	localStorage.set('user', state);
-}
+const state = localStorage.get('user', defaultUserState);
 
 export const userAtom = atom({
 	key: 'userAtom',

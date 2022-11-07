@@ -1,1 +1,1 @@
-export { userAtom, defaultUserState } from '@/store/user-atom';
+export { userAtom, defaultUserState } from './user-atom';
