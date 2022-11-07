@@ -1,6 +1,6 @@
-# Django + React 全栈项目 (任务管理系统)
+# Django + React 全栈项目 (项目管理系统)
 
-> 2021 年 ~ 2022 年, 大学四年级, 班长(Диляра У.)的毕设。
+> 源码仅供学习交流...
 
 ---
 
@@ -8,19 +8,19 @@
 
 #### 环境搭建
 
-- 前端相关
+- 前端
 
   - `Node.js` 版本 16.13.0 (及以上)
 
   - `Node 包管理器` 推荐使用 pnpm 6.28.0 (及以上), 退而求其次使用 yarn 1.22 (及以上)
 
-- 后端相关
+- 后端
   - Python 3.9.6 (及以上)
   - Django 3.2.8 (及以上, 没有 breaking change 的兼容版本)
 
 ---
 
-代码克隆到本地: `git clone https://github.com/YernarT/task_management_system.git`
+代码克隆到本地: `git clone https://github.com/YernarT/project_management_system.git`
 
 #### 前端
 
