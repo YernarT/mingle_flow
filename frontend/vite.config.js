@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import vitePluginImp from 'vite-plugin-imp';
 import react from '@vitejs/plugin-react';
 
 import path from 'path';
@@ -10,7 +11,20 @@ export default defineConfig({
 			'@': path.resolve(path.resolve(), './src'),
 		},
 	},
-	plugins: [react()],
+	
+	plugins: [
+		react(),
+		vitePluginImp({
+			optimize: true,
+			libList: [
+				{
+					libName: 'antd',
+					libDirectory: 'es',
+					style: name => `antd/es/${name}/style`,
+				},
+			],
+		}),
+	],
 
 	css: {
 		preprocessorOptions: {
@@ -20,8 +34,4 @@ export default defineConfig({
 		},
 	},
 
-	server: {
-		host: '0.0.0.0',
-		port: 3016,
-	},
 });
