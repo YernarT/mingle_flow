@@ -4,4 +4,3 @@ build/*
 !build/index.js
 # other
 .eslintrc.js
-commitlint.config.js
