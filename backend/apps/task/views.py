@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 
-from task.models import Task, TaskResult
+# from task.models import Task, TaskResult
 from task.serializer import task_serializer, task_list_serializer, task_result_serializer, task_result_list_serializer
-from team.models import Team
+# from project.models import Team
 from user.serializer import user_serializer
 
 from utils.request_middleware import API_View
@@ -10,8 +10,8 @@ from utils.error import UnauthorizedError
 
 
 class TaskAPI(API_View):
-    model_cls = Task
-    query_set = Task.objects.all()
+    # model_cls = Task
+    # query_set = Task.objects.all()
 
     def get(self, request):
 
@@ -21,8 +21,8 @@ class TaskAPI(API_View):
         params = self.get_params(request)['params']
         team_id = params.get('team_id')
 
-        if team_id:
-            tasks_model = tasks_model.filter(team=Team.objects.get(id=team_id))
+        # if team_id:
+            # tasks_model = tasks_model.filter(team=Team.objects.get(id=team_id))
 
         tasks_model = task_list_serializer(request, tasks_model)
 
@@ -42,7 +42,7 @@ class TaskAPI(API_View):
         data['end_time'] = datetime.strptime(
             data['end_time'], '%Y-%m-%d %H:%M:%S')
         data['creator'] = user['model']
-        data['team'] = Team.objects.get(id=data['team'])
+        # data['team'] = Team.objects.get(id=data['team'])
 
         model_obj = self.model_cls.objects.create(**data)
 
@@ -50,8 +50,8 @@ class TaskAPI(API_View):
 
 
 class TaskResultAPI(API_View):
-    model_cls = TaskResult
-    query_set = TaskResult.objects.all()
+    # model_cls = TaskResult
+    # query_set = TaskResult.objects.all()
 
     def get(self, request):
         _, task_results_model = self.get_base_query_set(
@@ -60,9 +60,9 @@ class TaskResultAPI(API_View):
         params = self.get_params(request)['params']
         task_id = params.get('task_id')
 
-        if task_id:
-            task_results_model = task_results_model.filter(
-                task=Task.objects.get(id=task_id))
+        # if task_id:
+            # task_results_model = task_results_model.filter(
+                # task=Task.objects.get(id=task_id))
 
         task_results = []
         for task_result_model in task_results_model:
@@ -82,15 +82,15 @@ class TaskResultAPI(API_View):
 
         file = request.FILES.get('file')
         task_id = request.POST.get('task_id')
-        task = Task.objects.get(id=task_id)
+        # task = Task.objects.get(id=task_id)
 
         if not file:
             return JsonResponse({
                 'message': 'Файлді жүктеу керек'
             }, status=400)
 
-        self.model_cls.objects.create(
-            task=task, file=file, submitter=user, submitted=True, finished=False)
+        # self.model_cls.objects.create(
+            # task=task, file=file, submitter=user, submitted=True, finished=False)
 
         return JsonResponse({}, status=201)
 
@@ -109,24 +109,24 @@ class TaskResultAPI(API_View):
         task_result_model.save()
 
         task_result = task_result_serializer(request, task_result_model)
-        task_result['submitter'] = user_serializer(request, task_result_model.submitter)
+        task_result['submitter'] = user_serializer(
+            request, task_result_model.submitter)
 
         return JsonResponse({'submission': task_result}, status=200)
 
 
-
-
 class TaskReportAPI(API_View):
-    model_cls = Task
-    query_set = Task.objects.all()
+    # model_cls = Task
+    # query_set = Task.objects.all()
 
     def get(self, request):
-        
+
         tasks_model = self.query_set.order_by('start_time')
         tasks = task_list_serializer(request, tasks_model)
 
         for idx, task_model in enumerate(tasks_model):
             task_results_model = task_model.taskresult_set.all()
-            tasks[idx]['results'] = task_result_list_serializer(request, task_results_model)
+            tasks[idx]['results'] = task_result_list_serializer(
+                request, task_results_model)
 
         return JsonResponse({'tasks': tasks}, status=200)
