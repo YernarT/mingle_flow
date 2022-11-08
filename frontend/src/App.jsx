@@ -13,7 +13,15 @@ import { CommonLoading, Header, Content } from '@/components';
 
 const CommonLayout = styled.div`
 	height: 100vh;
+	background-image: linear-gradient(to top, #0250c5 0%, #d43f8d 100%);
+	overflow: hidden;
+
 	position: relative;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `;
 
 export default function App() {

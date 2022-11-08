@@ -131,13 +131,11 @@ const MobileHeader = memo(function MobileHeader() {
 					onSelect={handleHeaderMenuSelect}
 					selectedKeys={[activeHeaderMenuKey]}>
 					<Menu.Item key="/">Бастапқы бет</Menu.Item>
-					<Menu.Item key="divider">
-						<Divider />
-					</Menu.Item>
 					{user.token ? (
 						<>
 							<Space>
 								<Button
+									block
 									type="primary"
 									onClick={() => {
 										history.push('/user');
@@ -145,6 +143,7 @@ const MobileHeader = memo(function MobileHeader() {
 									Жеке қәбинет
 								</Button>
 								<Button
+									block
 									type="danger"
 									onClick={() => {
 										antdMessage.info('Bye~');

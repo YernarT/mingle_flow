@@ -6,8 +6,6 @@ import { commonLayoutStyle } from '@/assets/style';
 const { Header } = Layout;
 
 const mobileHeaderStyle = css`
-	user-select: none;
-	
 	.mobile-header,
 	.mobile-header-trigger {
 		display: none;
@@ -34,15 +32,41 @@ const mobileHeaderStyle = css`
 		left: 0;
 		z-index: 1000;
 
-		width: 100%;
-		height: calc(100vh - 76px);
 		${commonLayoutStyle}
+		max-width: 100%;
+		height: calc(100vh - 76px - 10vh);
 		padding-top: 20px !important;
 
-		background: #fff;
+		border-radius: 4px;
+		border: 1.5px solid rgba(255, 255, 255, 0.18);
+		border-top: none;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+		background-image: linear-gradient(to top, #0250c5 0%, #d43f8d 100%);
+		box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+		backdrop-filter: blur(20px);
 
 		display: flex;
 		flex-direction: column;
+
+		.mobile-header-menu {
+			border: none;
+			background: transparent;
+
+			.ant-menu-item {
+				color: #1890ff;
+				text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.85);
+				font-size: 16px;
+			}
+		}
+
+		.ant-space {
+			width: 100%;
+
+			.ant-space-item {
+				flex-grow: 1;
+			}
+		}
 	}
 
 	.mobile-header--collapse {
@@ -54,16 +78,27 @@ export const HeaderStyledBox = styled(Header)`
 	${commonLayoutStyle}
 	${mobileHeaderStyle}
 
+	flex: 0 0 76px;
 	height: 76px;
 	padding-top: 10px !important;
 	padding-bottom: 10px !important;
-	background: inherit;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+
+	border-radius: 4px;
+	border: 1.5px solid rgba(255, 255, 255, 0.18);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	background: rgba(229, 194, 194, 0.2);
+	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+	backdrop-filter: blur(20px);
 
 	position: relative;
-
+	z-index: 1000;
 	display: flex;
 	align-items: center;
+	user-select: none;
 
 	.logo {
 		margin-right: 24px;
@@ -83,6 +118,7 @@ export const HeaderStyledBox = styled(Header)`
 	.header-menu {
 		min-width: 200px;
 		border-bottom: none;
+		background: transparent;
 
 		@media screen and (max-width: 575px) {
 			display: none;
