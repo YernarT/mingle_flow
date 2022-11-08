@@ -8,7 +8,7 @@ urlpatterns = [
     url('^admin/', admin.site.urls),
 
     url('^api/', include('user.urls')),
-    url('^api/', include('team.urls')),
+    url('^api/', include('project.urls')),
     url('^api/', include('task.urls')),
 
     url(r'^media/(?P<path>.*)$', serve,
