@@ -1,32 +1,34 @@
 from django.http import JsonResponse
 
-# from task.models import Task, TaskResult
+from task.models import Task, TaskPrincipal, SubmittedResult
 from task.serializer import task_serializer, task_list_serializer, task_result_serializer, task_result_list_serializer
-# from project.models import Team
+from project.models import Project, Contributor
+from user.models import User
 from user.serializer import user_serializer
 
 from utils.request_middleware import API_View
+from utils.data import serialized_data
 from utils.error import UnauthorizedError
 
 
 class TaskAPI(API_View):
-    # model_cls = Task
-    # query_set = Task.objects.all()
+    model_cls = Task
 
     def get(self, request):
 
-        _, tasks_model = self.get_base_query_set(
+        _, task_model_list = self.get_base_query_set(
             request, task_list_serializer)
 
         params = self.get_params(request)['params']
-        team_id = params.get('team_id')
+        project_id = params.get('project_id')
 
-        # if team_id:
-            # tasks_model = tasks_model.filter(team=Team.objects.get(id=team_id))
+        if project_id:
+            task_model_list = task_model_list.filter(
+                project=Project.objects.get(id=project_id))
 
-        tasks_model = task_list_serializer(request, tasks_model)
+        serialized_task_list = task_list_serializer(request, task_model_list)
 
-        return JsonResponse({'tasks': tasks_model}, status=200)
+        return JsonResponse({'tasks': serialized_task_list}, status=200)
 
     def post(self, request):
 
@@ -37,16 +39,41 @@ class TaskAPI(API_View):
 
         from datetime import datetime
         data = self.get_data(request)
-        data['start_time'] = datetime.strptime(
-            data['start_time'], '%Y-%m-%d %H:%M:%S')
-        data['end_time'] = datetime.strptime(
-            data['end_time'], '%Y-%m-%d %H:%M:%S')
-        data['creator'] = user['model']
-        # data['team'] = Team.objects.get(id=data['team'])
+        task_model_data = {
+            'name': data['name'],
+            'description': data['description'],
+            'start_time': datetime.strptime(data['start_time'], '%Y-%m-%d %H:%M:%S'),
+            'end_time': datetime.strptime(data['end_time'], '%Y-%m-%d %H:%M:%S'),
+            'creator': user['model'],
+            'funds': data['funds'],
+            'project': Project.objects.get(id=data['project'])
+        }
+        responsibles: list[int] = data['responsibles']
 
-        model_obj = self.model_cls.objects.create(**data)
+        model_obj = self.model_cls.objects.create(**task_model_data)
 
-        return JsonResponse({'task': task_serializer(request, model_obj), 'message': 'Сәтті жарияланды'}, status=201)
+        serialized_task = serialized_data(
+            request, model_obj, {'is_multiple': False})
+
+        serialized_task['project'] = serialized_data(
+            request, model_obj.project, {'is_multiple': False})
+        serialized_task['creator'] = user_serializer(
+            request, model_obj.creator)
+        serialized_task['responsibles'] = []
+
+        for task_principal in responsibles:
+            task_principal_model = TaskPrincipal.objects.create(
+                task=model_obj,
+                user=User.objects.get(id=task_principal)
+            )
+
+            # 本质上是 serialized user list
+            serialized_task_principal = {
+                'user': user_serializer(request, task_principal_model.user)
+            }
+            serialized_task['responsibles'].append(serialized_task_principal)
+
+        return JsonResponse({'task': serialized_task, 'message': 'Сәтті жарияланды'}, status=201)
 
 
 class TaskResultAPI(API_View):
@@ -61,8 +88,8 @@ class TaskResultAPI(API_View):
         task_id = params.get('task_id')
 
         # if task_id:
-            # task_results_model = task_results_model.filter(
-                # task=Task.objects.get(id=task_id))
+        # task_results_model = task_results_model.filter(
+        # task=Task.objects.get(id=task_id))
 
         task_results = []
         for task_result_model in task_results_model:

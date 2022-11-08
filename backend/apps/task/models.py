@@ -33,7 +33,15 @@ class TaskPrincipal(models.Model):
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
     user = models.ForeignKey(
-        'user.User', on_delete=models.CASCADE, verbose_name='Қатысушы')
+        'user.User', on_delete=models.CASCADE, verbose_name='Жауапты мүше')
+
+    class Meta:
+        db_table = 'task_principal'
+        verbose_name = 'Жауапты мүше'
+        verbose_name_plural = 'Жауапты мүшелер'
+
+    def __str__(self):
+        return self.task.name
 
 
 class SubmittedResult(models.Model):
