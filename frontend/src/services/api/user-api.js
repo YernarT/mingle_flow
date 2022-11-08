@@ -19,33 +19,33 @@ export const reqUploadAvatar = avatar =>
 export const reqGetAllUsers = () => apiServerInstance.get('/user/');
 
 /**
- * Team related ↓
+ * Project related ↓
  */
 
-// Get Teams
-export const reqGetTeams = () => apiServerInstance.get('/team/');
+// Get Projects
+export const reqGetProjects = () => apiServerInstance.get('/project/');
 
-// Create Team
-export const reqCreateTeam = data => apiServerInstance.post('/team/', data);
+// Create Project
+export const reqCreateProject = data => apiServerInstance.post('/project/', data);
 
-// Get Team Members
-export const reqGetTeamMembers = teamId =>
-	apiServerInstance.get(`/team_member/?team_id=${teamId}`);
+// Get Project Contributors
+export const reqGetProjectContributors = projectId =>
+	apiServerInstance.get(`/contributor/?project_id=${projectId}`);
 
-// Add Team Member
-export const reqAddTeamMember = data =>
-	apiServerInstance.post('/team_member/', data);
+// Add Project Contributors
+export const reqAddProjectContributors = data =>
+	apiServerInstance.post('/contributor/', data);
 
 /**
  * Task related ↓
  */
 
-// Get Tasks
+// Get All Tasks
 export const reqGetTasks = () => apiServerInstance.get('/task/');
 
-// Get Team Task
-export const reqGetTeamTask = teamId =>
-	apiServerInstance.get(`/task/?team_id=${teamId}`);
+// Get Project Tasks
+export const reqGetProjectTasks = projectId =>
+	apiServerInstance.get(`/task/?project_id=${projectId}`);
 
 // Add Task
 export const reqAddTask = data => apiServerInstance.post('/task/', data);
