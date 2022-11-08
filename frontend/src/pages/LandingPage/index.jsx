@@ -9,9 +9,7 @@ export default function LandingPage() {
 	return (
 		<LandingPageStyledBox>
 			<Space direction="vertical" size="large">
-				<Title className="title">
-					Жол тапсырмаларды басқару жүйесі
-				</Title>
+				<Title className="title">Жобаны басқару жүйесі</Title>
 
 				<Typography>
 					<Title level={2}>Кіріспе</Title>
@@ -37,10 +35,10 @@ export default function LandingPage() {
 					<Title level={2}>Нұсқаулық және сипаттама</Title>
 					<Paragraph>
 						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt
-						possimus odit animi repellat cupiditate (
-						<Text code>Django.py</Text> and <Text code>React.js</Text>)
-						praesentium recusandae magni facere repudiandae eaque culpa laborum
-						delectus, similique ducimus. Ea explicabo suscipit ab natus.
+						possimus odit animi repellat cupiditate (<Text code>Django.py</Text>{' '}
+						and <Text code>React.js</Text>) praesentium recusandae magni facere
+						repudiandae eaque culpa laborum delectus, similique ducimus. Ea
+						explicabo suscipit ab natus.
 					</Paragraph>
 
 					<Paragraph>
