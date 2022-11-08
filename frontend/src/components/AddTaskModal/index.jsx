@@ -3,29 +3,42 @@ import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
-import { useRequest } from 'ahooks';
-import { reqAddTask } from '@/services/api/user-api';
+import { useSetState, useRequest } from 'ahooks';
+import { reqGetProjectContributors, reqAddTask } from '@/services/api/user-api';
 
 import {
 	Modal,
 	Form,
 	Input,
 	DatePicker,
+	Select,
 	message as antdMessage,
 	InputNumber,
 	Button,
 } from 'antd';
 
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
-export default function AddTaskModal({
-	visible,
-	onCancel,
-	afterAddTask,
-	team,
-}) {
+export default function AddTaskModal({ visible, onCancel, afterAdd, project }) {
 	const history = useHistory();
 	const setUser = useSetRecoilState(userAtom);
+	const [state, setState] = useSetState({
+		contributors: [],
+		selectedContributors: [],
+	});
+
+	// 添加Contributor 的请求
+	const { loading: loadingGetProjectContributors } = useRequest(
+		() => reqGetProjectContributors(project.id),
+		{
+			onSuccess({ contributors }) {
+				setState({
+					contributors,
+				});
+			},
+		},
+	);
 
 	// 添加Task 的请求
 	const { runAsync, loading: loadingAddTask } = useRequest(
@@ -39,18 +52,19 @@ export default function AddTaskModal({
 	const handleSubmit = values => {
 		let data = {
 			name: values.name,
-			description: values.description,
+			description: values.description || '',
 			start_time: values['time-range'][0].format('YYYY-MM-DD HH:mm:ss'),
 			end_time: values['time-range'][1].format('YYYY-MM-DD HH:mm:ss'),
 			funds: values.funds,
-			team: team.id,
+			project: project.id,
+			responsibles: values.responsibles,
 		};
 
 		runAsync(data)
 			.then(({ message, task }) => {
 				antdMessage.success(message);
 				onCancel();
-				afterAddTask(task);
+				afterAdd(task);
 			})
 			.catch(({ message, needExecuteLogout, initialUser }) => {
 				antdMessage.error(message);
@@ -63,7 +77,7 @@ export default function AddTaskModal({
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			onCancel={onCancel}
 			title="Тапсырма жариялау"
 			footer={null}>
@@ -125,6 +139,25 @@ export default function AddTaskModal({
 						},
 					]}>
 					<InputNumber step={1000} style={{ width: '100%' }} />
+				</Form.Item>
+
+				<Form.Item name="responsibles" label="Жауапты мүшелер">
+					<Select
+						loading={loadingGetProjectContributors}
+						mode="multiple"
+						allowClear
+						// onChange={value => {
+						// 	setState({ selectedUsers: value });
+						// }}
+						placeholder="Мүшелерді талдаңыз">
+						{state.contributors
+							.filter(contributor => contributor.user.id !== project.creator)
+							.map(contributor => (
+								<Option value={contributor.id} key={contributor.id}>
+									{contributor.user.username}
+								</Option>
+							))}
+					</Select>
 				</Form.Item>
 
 				<Button

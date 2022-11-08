@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import {  useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
 import { useRequest, useSetState } from 'ahooks';
@@ -12,7 +12,7 @@ import { InboxOutlined } from '@ant-design/icons';
 export default function AddSubmissionModal({
 	visible,
 	onCancel,
-	afterAddSubmission,
+	afterAdd,
 	task,
 }) {
 	const history = useHistory();
@@ -45,7 +45,7 @@ export default function AddSubmissionModal({
 				antdMessage.success('Сәтті жүктеп салынды');
 				setState({ file: null });
 				onCancel();
-				afterAddSubmission();
+				afterAdd();
 			})
 			.catch(({ message, needExecuteLogout, initialUser }) => {
 				antdMessage.error(message);
@@ -59,7 +59,7 @@ export default function AddSubmissionModal({
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			onCancel={onCancel}
 			title="Тапсырма жүктеу"
 			footer={null}>

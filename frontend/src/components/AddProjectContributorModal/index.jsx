@@ -4,17 +4,20 @@ import { useSetRecoilState } from 'recoil';
 import { userAtom } from '@/store';
 
 import { useSetState, useRequest } from 'ahooks';
-import { reqGetAllUsers, reqAddTeamMember } from '@/services/api/user-api';
+import {
+	reqGetAllUsers,
+	reqAddProjectContributors,
+} from '@/services/api/user-api';
 
 import { Modal, Select, message as antdMessage, Button } from 'antd';
 
 const { Option } = Select;
 
-export default function AddTeamMemberModal({
+export default function AddProjectContributorModal({
 	visible,
 	onCancel,
-	afterAddTeamMember,
-	team,
+	afterAdd,
+	project,
 }) {
 	const history = useHistory();
 	const setUser = useSetRecoilState(userAtom);
@@ -32,29 +35,29 @@ export default function AddTeamMemberModal({
 		},
 	});
 
-	// 添加TeamMember 的请求
-	const { runAsync, loading: loadingAddTeamMember } = useRequest(
-		data => reqAddTeamMember(data),
+	// 添加Contributor 的请求
+	const { runAsync, loading: loadingAddProjectContributors } = useRequest(
+		data => reqAddProjectContributors(data),
 		{
 			manual: true,
 		},
 	);
 
 	// 处理表单
-	const handleAddMember = () => {
+	const handleAddContributors = () => {
 		if (!state.selectedUsers.length) {
 			antdMessage.warning('Пайдаланушыны таңдау керек');
 			return;
 		}
 
 		runAsync({
-			team_id: team.id,
-			members: state.selectedUsers,
+			project_id: project.id,
+			contributors: state.selectedUsers,
 		})
-			.then(({ members }) => {
+			.then(({ contributors }) => {
 				antdMessage.success('Сәтті қосылды');
 				onCancel();
-				afterAddTeamMember(members);
+				afterAdd(contributors);
 			})
 			.catch(({ message, needExecuteLogout, initialUser }) => {
 				antdMessage.error(message);
@@ -67,7 +70,7 @@ export default function AddTeamMemberModal({
 
 	return (
 		<Modal
-			visible={visible}
+			open={visible}
 			onCancel={onCancel}
 			title="Команда мүшесін қосу"
 			footer={null}>
@@ -81,7 +84,12 @@ export default function AddTeamMemberModal({
 				}}
 				placeholder="Мүшелерді талдаңыз">
 				{state.allUsers
-					.filter(_user => !team.members.find(member => member.id === _user.id))
+					.filter(
+						_user =>
+							!project.contributors.find(
+								contributor => contributor.id === _user.id,
+							),
+					)
 					.map(_user => (
 						<Option value={_user.id} key={_user.id}>
 							{_user.username}
@@ -92,9 +100,9 @@ export default function AddTeamMemberModal({
 			<Button
 				type="primary"
 				block
-				loading={loadingAddTeamMember}
+				loading={loadingAddProjectContributors}
 				style={{ marginTop: 24 }}
-				onClick={handleAddMember}>
+				onClick={handleAddContributors}>
 				Қосу
 			</Button>
 		</Modal>

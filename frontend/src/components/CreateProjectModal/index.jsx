@@ -1,25 +1,21 @@
 import React from 'react';
 
 import { useRequest } from 'ahooks';
-import { reqCreateTeam } from '@/services/api/user-api';
+import { reqCreateProject } from '@/services/api/user-api';
 
 import { Modal, Form, Input, message as antdMessage, Button } from 'antd';
 
-export default function CreateTeamModal({
-	visible,
-	onCancel,
-	afterCreateTeam,
-}) {
-	// 添加Team 的请求
-	const { runAsync, loading } = useRequest(data => reqCreateTeam(data), {
+export default function CreateProjectModal({ visible, onCancel, afterCreate }) {
+	// 添加Project 的请求
+	const { runAsync, loading } = useRequest(data => reqCreateProject(data), {
 		manual: true,
 	});
 
 	// 处理表单
 	const handleSubmit = values => {
 		runAsync(values)
-			.then(({ team }) => {
-				afterCreateTeam(team);
+			.then(({ project }) => {
+				afterCreate(project);
 			})
 			.catch(({ message }) => {
 				antdMessage.error(message);
@@ -27,17 +23,13 @@ export default function CreateTeamModal({
 	};
 
 	return (
-		<Modal
-			visible={visible}
-			onCancel={onCancel}
-			title="Команда құру"
-			footer={null}>
+		<Modal open={visible} onCancel={onCancel} title="Жоба құру" footer={null}>
 			<Form onFinish={handleSubmit} autoComplete="off" layout="vertical">
 				<Form.Item
-					label="Команда аты"
+					label="Жоба аты"
 					name="name"
 					rules={[
-						{ required: true, message: 'Команда атын енгізіңіз' },
+						{ required: true, message: 'Жоба атын енгізіңіз' },
 						{ min: 4, message: 'Минимум ұзындық (4) шегінен аз' },
 						{ max: 40, message: 'Максималды ұзындық (40) шегінен асды' },
 					]}>

@@ -24,7 +24,7 @@ export default function ShowReportModal({ visible, onCancel }) {
 	});
 
 	return (
-		<Modal visible={visible} onCancel={onCancel} title="Отчет" footer={null}>
+		<Modal open={visible} onCancel={onCancel} title="Отчет" footer={null}>
 			<List
 				itemLayout="horizontal"
 				dataSource={data?.tasks ?? []}
