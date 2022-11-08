@@ -20,7 +20,7 @@ class API_View(View):
 
         # 指定查询集
         # 类型: 模型对象 查询集
-        self.query_set
+        # self.query_set
 
     def get_params(self, request: WSGIRequest):
         '''获取 params 数据'''
@@ -62,14 +62,16 @@ class API_View(View):
         # offset = params['offset']
         serialized_filter = params['serialized_filter']
         serialized_sort = params['serialized_sort']
+        
+        query_set = self.model_cls.objects.all()
 
         if serialized_filter:
-            self.query_set = self.query_set.filter(**serialized_filter)
+            query_set = query_set.filter(**serialized_filter)
         if serialized_sort:
-            self.query_set = self.query_set.order_by(*serialized_sort)
+            query_set = query_set.order_by(*serialized_sort)
         if limit:
-            self.query_set = self.query_set[:limit]
+            query_set = query_set[:limit]
 
-        data = serializer(request, self.query_set), self.query_set
+        data = serializer(request, query_set), query_set
 
         return data
