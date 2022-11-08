@@ -52,7 +52,7 @@ export const UserProfileStyled = styled.div`
 		}
 	}
 
-	.team-section,
+	.project-section,
 	.task-section {
 		.header {
 			display: flex;
@@ -73,7 +73,7 @@ export const UserProfileStyled = styled.div`
 			}
 		}
 
-		.teams,
+		.projects,
 		.tasks {
 			display: flex;
 			gap: 20px;
@@ -93,12 +93,12 @@ export const UserProfileStyled = styled.div`
 	}
 `;
 
-export const TeamsStyled = styled.ul`
+export const ProjectsStyled = styled.ul`
 	padding: 0;
 	margin: 0;
 
-	${({ hasTeam }) =>
-		hasTeam
+	${({ hasProject }) =>
+		hasProject
 			? `
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -115,7 +115,7 @@ export const TeamsStyled = styled.ul`
 	${scrollStyle}
 `;
 
-export const TeamItemStyled = styled.li`
+export const ProjectItemStyled = styled.li`
 	flex-shrink: 0;
 	display: flex;
 	flex-direction: column;
@@ -124,11 +124,11 @@ export const TeamItemStyled = styled.li`
 
 	cursor: pointer;
 
-	.team-icon {
+	.project-icon {
 		font-size: 2rem;
 	}
 
-	.team-name {
+	.project-name {
 		text-align: center;
 	}
 `;

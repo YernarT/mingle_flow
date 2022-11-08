@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '@/store';
 
-import { reqGetTeams, reqGetTasks } from '@/services/api/user-api';
+import { reqGetProjects, reqGetTasks } from '@/services/api/user-api';
 import { useSetState, useRequest } from 'ahooks';
 import { useAuth } from '@/hooks';
 
@@ -23,11 +23,11 @@ import {
 	DollarCircleOutlined,
 	SendOutlined,
 } from '@ant-design/icons';
-import { CreateTeamModal } from '@/components';
+import { CreateProjectModal } from '@/components';
 import {
 	UserProfileStyled,
-	TeamsStyled,
-	TeamItemStyled,
+	ProjectsStyled,
+	ProjectItemStyled,
 	TasksStyled,
 	TaskItemStyled,
 } from './style';
@@ -42,16 +42,16 @@ export default function UserProfilePage() {
 	useAuth(user.token);
 
 	const [state, setState] = useSetState({
-		teams: [],
+		projects: [],
 		tasks: [],
 
-		createTeamModalVisible: false,
+		createProjectModalVisible: false,
 	});
 
-	// 获取 Teams
-	const { loading: loadingGetTeams } = useRequest(reqGetTeams, {
-		onSuccess({ teams }) {
-			setState({ teams });
+	// 获取 Projects
+	const { loading: loadingGetProjects } = useRequest(reqGetProjects, {
+		onSuccess({ projects }) {
+			setState({ projects });
 		},
 	});
 
@@ -62,27 +62,27 @@ export default function UserProfilePage() {
 		},
 	});
 
-	// 创建Team 的回调
-	const afterCreateTeam = team => {
-		antdMessage.success('Команданы сәтті құрыңыз');
+	// 创建Project 的回调
+	const afterCreateProject = project => {
+		antdMessage.success('Сәтті құрылды');
 
 		setState(prevState => ({
-			teams: [...prevState.teams, team],
-			createTeamModalVisible: false,
+			projects: [...prevState.projects, project],
+			createProjectModalVisible: false,
 		}));
 	};
 
 	// 处理 添加Task
 	const handleAddTask = () => {
-		// 没有 team
-		let meTeam = state.teams.find(team => team.creator === user.id);
+		// 没有 project
+		let myProject = state.projects.find(project => project.creator === user.id);
 
-		if (meTeam) {
-			history.push('/team', { team: meTeam });
+		if (myProject) {
+			history.push('/project', { project: myProject });
 			return;
 		}
 
-		antdMessage.warning('Сізде команда жоқ');
+		antdMessage.warning('Сізде жоба жоқ');
 	};
 
 	return (
@@ -101,88 +101,95 @@ export default function UserProfilePage() {
 				</Button>
 			</section>
 
-			<section className="team-section">
+			<section className="project-section">
 				<div className="header">
 					<Title level={2} className="title">
-						Команда
+						Жоба
 					</Title>
-					<Button onClick={() => setState({ createTeamModalVisible: true })}>
+					<Button onClick={() => setState({ createProjectModalVisible: true })}>
 						<PlusOutlined />
 					</Button>
 				</div>
 
-				<div className="teams">
-					<Card className="my-teams" title="Менің командаларым">
-						<Skeleton active loading={loadingGetTeams}>
-							<TeamsStyled
-								hasTeam={Boolean(
-									state.teams.filter(team => team.creator === user.id).length,
+				<div className="projects">
+					<Card className="my-projects" title="Менің жобаларым">
+						<Skeleton active loading={loadingGetProjects}>
+							<ProjectsStyled
+								hasProject={Boolean(
+									state.projects.filter(project => project.creator === user.id)
+										.length,
 								)}>
-								{state.teams
-									.filter(team => team.creator === user.id)
-									.map(team => (
-										<TeamItemStyled
-											key={team.id}
-											onClick={() => history.push('/team', { team })}>
-											<TeamOutlined className="team-icon" />
+								{state.projects
+									.filter(project => project.creator === user.id)
+									.map(project => (
+										<ProjectItemStyled
+											key={project.id}
+											onClick={() => history.push('/project', { project })}>
+											<TeamOutlined className="project-icon" />
 
-											<Text className="team-name">{team.name}</Text>
-										</TeamItemStyled>
+											<Text className="project-name">{project.name}</Text>
+										</ProjectItemStyled>
 									))}
 
-								{state.teams.filter(team => team.creator === user.id).length ===
-									0 && <Empty description="Жоқ" />}
-							</TeamsStyled>
+								{state.projects.filter(project => project.creator === user.id)
+									.length === 0 && <Empty description="Жоқ" />}
+							</ProjectsStyled>
 						</Skeleton>
 					</Card>
 
-					<Card className="joined-teams" title="Қосылған командаларым">
-						<Skeleton active loading={loadingGetTeams}>
-							<TeamsStyled
-								hasTeam={Boolean(
-									state.teams.filter(
-										team =>
-											team.creator !== user.id &&
-											team.members.find(member => member.id === user.id),
+					<Card className="joined-projects" title="Мен қатысқан жобалар">
+						<Skeleton active loading={loadingGetProjects}>
+							<ProjectsStyled
+								hasProject={Boolean(
+									state.projects.filter(
+										project =>
+											project.creator !== user.id &&
+											project.contributors.find(
+												contributor => contributor.id === user.id,
+											),
 									).length,
 								)}>
-								{state.teams
+								{state.projects
 									.filter(
-										team =>
-											team.creator !== user.id &&
-											team.members.find(member => member.id === user.id),
+										project =>
+											project.creator !== user.id &&
+											project.contributors.find(
+												contributor => contributor.id === user.id,
+											),
 									)
-									.map(team => (
-										<TeamItemStyled
-											key={team.id}
-											onClick={() => history.push('/team', { team })}>
-											<TeamOutlined className="team-icon" />
-											<Text className="team-name">{team.name}</Text>
-										</TeamItemStyled>
+									.map(project => (
+										<ProjectItemStyled
+											key={project.id}
+											onClick={() => history.push('/project', { project })}>
+											<TeamOutlined className="project-icon" />
+											<Text className="project-name">{project.name}</Text>
+										</ProjectItemStyled>
 									))}
 
-								{state.teams.filter(
-									team =>
-										team.creator !== user.id &&
-										team.members.find(member => member.id === user.id),
+								{state.projects.filter(
+									project =>
+										project.creator !== user.id &&
+										project.contributors.find(
+											contributor => contributor.id === user.id,
+										),
 								).length === 0 && <Empty description="Жоқ" />}
-							</TeamsStyled>
+							</ProjectsStyled>
 						</Skeleton>
 					</Card>
 				</div>
 
-				{/* 创建 Team 模态框 */}
-				<CreateTeamModal
-					visible={state.createTeamModalVisible}
-					onCancel={() => setState({ createTeamModalVisible: false })}
-					afterCreateTeam={afterCreateTeam}
+				{/* 创建 Project 模态框 */}
+				<CreateProjectModal
+					visible={state.createProjectModalVisible}
+					onCancel={() => setState({ createProjectModalVisible: false })}
+					afterCreate={afterCreateProject}
 				/>
 			</section>
 
 			<section className="task-section">
 				<div className="header">
 					<Title level={2} className="title">
-						Тапсырмалар
+						Тапсырма
 					</Title>
 					<Button onClick={handleAddTask}>
 						<PlusOutlined />

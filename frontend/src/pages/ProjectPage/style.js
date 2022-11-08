@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import { scrollStyle } from '@/assets/style';
 
-export const TeamPageStyled = styled.div`
-	.team-basic-info {
+export const ProjectPageStyled = styled.div`
+	.ant-typography {
+		color: rgba(0, 0, 0, 0.85) !important;
+	}
+
+	.project-basic-info {
 		margin-bottom: 36px;
 	}
 
@@ -26,12 +30,12 @@ export const TeamPageStyled = styled.div`
 	}
 `;
 
-export const MembersStyled = styled.ul`
+export const ContributorsStyled = styled.ul`
 	padding: 0;
 	margin: 0;
 
-	${({ hasMember }) =>
-		hasMember
+	${({ hasContributor }) =>
+		hasContributor
 			? `
 			display: grid;
 			grid-template-columns: repeat(3, 1fr);
@@ -48,7 +52,7 @@ export const MembersStyled = styled.ul`
 	${scrollStyle}
 `;
 
-export const TeamMemberStyled = styled.li`
+export const ProjectContributorStyled = styled.li`
 	flex-shrink: 0;
 	display: flex;
 	flex-direction: column;

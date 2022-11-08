@@ -3,7 +3,10 @@ import { useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from '@/store';
 
-import { reqGetTeamTask, reqGetTeamMembers } from '@/services/api/user-api';
+import {
+	reqGetProjectTasks,
+	reqGetProjectContributors,
+} from '@/services/api/user-api';
 import { useSetState, useRequest, useCreation } from 'ahooks';
 import { useAuth } from '@/hooks';
 
@@ -22,21 +25,21 @@ import {
 	SendOutlined,
 } from '@ant-design/icons';
 import {
-	AddTeamMemberModal,
+	AddProjectContributorModal,
 	AddTaskModal,
 	ShowReportModal,
 } from '@/components';
 import {
-	TeamPageStyled,
-	MembersStyled,
-	TeamMemberStyled,
+	ProjectPageStyled,
+	ContributorsStyled,
+	ProjectContributorStyled,
 	TasksStyled,
 	TaskItemStyled,
 } from './style';
 
 const { Title, Text } = Typography;
 
-export default function TeamPage() {
+export default function ProjectPage() {
 	const user = useRecoilValue(userAtom);
 	const history = useHistory();
 
@@ -44,25 +47,25 @@ export default function TeamPage() {
 	useAuth(user.token);
 
 	const [state, setState] = useSetState({
-		team: history.location.state.team,
+		project: history.location.state.project,
 
-		members: [],
+		contributors: [],
 		tasks: [],
 
-		addTeamMemberModalVisibile: false,
+		addProjectContributorModalVisibile: false,
 		addTaskModalVisibile: false,
 		showReportVisible: false,
 	});
 
-	// 当前用户是否是群主 (Team creator)
-	let thisMyTeam = useCreation(
-		() => user.id === state.team.creator,
-		[user.id, state.team],
+	// 当前用户是否是项目所有者 (Project creator)
+	let thisMyProject = useCreation(
+		() => user.id === state.project.creator,
+		[user.id, state.project],
 	);
 
 	// 获取 Tasks
 	const { loading: loadingGetTasks } = useRequest(
-		() => reqGetTeamTask(state.team.id),
+		() => reqGetProjectTasks(state.project.id),
 		{
 			onSuccess({ tasks }) {
 				setState({ tasks });
@@ -70,20 +73,20 @@ export default function TeamPage() {
 		},
 	);
 
-	// 获取 Members
-	const { loading: loadingGetMembers } = useRequest(
-		() => reqGetTeamMembers(state.team.id),
+	// 获取 Contributors
+	const { loading: loadingGetContributors } = useRequest(
+		() => reqGetProjectContributors(state.project.id),
 		{
-			onSuccess({ members }) {
-				setState({ members });
+			onSuccess({ contributors }) {
+				setState({ contributors });
 			},
 		},
 	);
 
 	return (
-		<TeamPageStyled>
-			<Card title={state.team.name} className="team-basic-info">
-				<Text>{state.team.description || 'Сипаттама жоқ'}</Text>
+		<ProjectPageStyled>
+			<Card title={state.project.name} className="project-basic-info">
+				<Text>{state.project.description || 'Сипаттама жоқ'}</Text>
 
 				<div
 					style={{
@@ -115,7 +118,7 @@ export default function TeamPage() {
 						<div className="head">
 							<Title level={5}>Тапсырмалар</Title>
 
-							{thisMyTeam && (
+							{thisMyProject && (
 								<Button
 									onClick={() => setState({ addTaskModalVisibile: true })}>
 									<PlusOutlined />
@@ -149,8 +152,8 @@ export default function TeamPage() {
 					<AddTaskModal
 						visible={state.addTaskModalVisibile}
 						onCancel={() => setState({ addTaskModalVisibile: false })}
-						team={state.team}
-						afterAddTask={task => {
+						project={state.project}
+						afterAdd={task => {
 							setState(prevState => ({
 								tasks: [...prevState.tasks, task],
 							}));
@@ -159,49 +162,50 @@ export default function TeamPage() {
 				</Card>
 
 				<Card
-					className="members"
+					className="contributors"
 					title={
 						<div className="head">
 							<Title level={5}>Мүшелер</Title>
 
-							{thisMyTeam && (
+							{thisMyProject && (
 								<Button
 									onClick={() =>
-										setState({ addTeamMemberModalVisibile: true })
+										setState({ addProjectContributorModalVisibile: true })
 									}>
 									<PlusOutlined />
 								</Button>
 							)}
 						</div>
 					}>
-					<Skeleton active loading={loadingGetMembers}>
-						<MembersStyled hasMember={Boolean(state.members.length)}>
-							{state.members.map(member => (
-								<TeamMemberStyled key={member.id}>
-									<Avatar className="avatar" src={member.avatar} />
+					<Skeleton active loading={loadingGetContributors}>
+						<ContributorsStyled
+							hasContributor={Boolean(state.contributors.length)}>
+							{state.contributors.map(contributor => (
+								<ProjectContributorStyled key={contributor.id}>
+									<Avatar className="avatar" src={contributor.user.avatar} />
 
-									<Text className="username">{member.username}</Text>
-								</TeamMemberStyled>
+									<Text className="username">{contributor.user.username}</Text>
+								</ProjectContributorStyled>
 							))}
 
-							{state.members.length === 0 && <Empty description="Жоқ" />}
-						</MembersStyled>
+							{state.contributors.length === 0 && <Empty description="Жоқ" />}
+						</ContributorsStyled>
 					</Skeleton>
 
-					<AddTeamMemberModal
-						visible={state.addTeamMemberModalVisibile}
+					<AddProjectContributorModal
+						visible={state.addProjectContributorModalVisibile}
 						onCancel={() => {
-							setState({ addTeamMemberModalVisibile: false });
+							setState({ addProjectContributorModalVisibile: false });
 						}}
-						team={state.team}
-						afterAddTeamMember={members => {
+						project={state.project}
+						afterAdd={contributors => {
 							setState(prevState => ({
-								members: [...prevState.members, ...members],
+								contributors: [...prevState.contributors, ...contributors],
 							}));
 						}}
 					/>
 				</Card>
 			</div>
-		</TeamPageStyled>
+		</ProjectPageStyled>
 	);
 }

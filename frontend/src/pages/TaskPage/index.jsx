@@ -117,7 +117,7 @@ export default function TaskPage() {
 						visible={state.addSubmissionModalVisible}
 						onCancel={() => setState({ addSubmissionModalVisible: false })}
 						task={state.task}
-						afterAddSubmission={() => {
+						afterAdd={() => {
 							setState({ addSubmissionModalVisible: false });
 							history.goBack();
 						}}

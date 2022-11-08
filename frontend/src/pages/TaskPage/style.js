@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 export const TaskPageStyled = styled.div`
+	.ant-typography {
+		color: rgba(0, 0, 0, 0.85) !important;
+	}
+
 	.title {
 		text-align: center;
 		width: 100%;
