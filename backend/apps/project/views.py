@@ -1,31 +1,30 @@
 from django.http import JsonResponse
 
-# from project.models import Team, TeamMember
-from project.serializer import team_serializer, team_list_serializer, team_member_serializer, team_member_list_serializer
+from project.models import Project, Contributor
 from user.models import User
 from user.serializer import user_serializer
 
 from utils.request_middleware import API_View
+from utils.data import serialized_data
 from utils.error import UnauthorizedError
 
 
-class TeamAPI(API_View):
-    # model_cls = Team
-    # query_set = Team.objects.all()
+class ProjectAPI(API_View):
+    model_cls = Project
 
     def get(self, request):
 
-        serialized_teams, teams_model = self.get_base_query_set(
-            request, team_list_serializer)
+        serialized_projects, projects_model = self.get_base_query_set(
+            request, serialized_data)
 
-        for idx, team in enumerate(teams_model):
-            members_model = team.teammember_set.all()
-            members = [user_serializer(request, member_model.member)
-                       for member_model in members_model]
+        for idx, project in enumerate(projects_model):
+            contributors_model = project.contributor_set.all()
+            contributors = [user_serializer(request, contributor.user)
+                            for contributor in contributors_model]
 
-            serialized_teams[idx]['members'] = members
+            serialized_projects[idx]['contributors'] = contributors
 
-        return JsonResponse({'teams': serialized_teams}, status=200)
+        return JsonResponse({'projects': serialized_projects}, status=200)
 
     def post(self, request):
 
@@ -38,39 +37,42 @@ class TeamAPI(API_View):
         data['creator'] = user['model']
 
         model_obj = self.model_cls.objects.create(**data)
-        team = team_serializer(request, model_obj)
+        project = serialized_data(request, model_obj, {'is_multiple': False})
 
-        # member_model = TeamMember.objects.create(
-            # team=model_obj, member=user['model'])
-        # member = team_member_serializer(request, member_model)
+        contributor_model = Contributor.objects.create(
+            project=model_obj, user=user['model'])
+        contributor = serialized_data(
+            request, contributor_model, {'is_multiple': False})
 
-        # team['members'] = [member]
+        project['contributors'] = [contributor]
 
-        return JsonResponse({'team': team, 'message': 'Сәтті құрылды'}, status=201)
+        return JsonResponse({'project': project, 'message': 'Сәтті құрылды'}, status=201)
 
 
-class TeamMemberAPI(API_View):
-    # model_cls = TeamMember
-    # query_set = TeamMember.objects.all()
+class ContributorAPI(API_View):
+    model_cls = Contributor
 
     def get(self, request):
 
-        _, members_model = self.get_base_query_set(
-            request, team_member_list_serializer)
+        _, contributors_model = self.get_base_query_set(
+            request, serialized_data)
 
         params = self.get_params(request)['params']
-        team_id = params.get('team_id')
+        project_id = params.get('project_id')
 
-        # if team_id:
-            # members_model = members_model.filter(
-                # team=Team.objects.get(id=team_id))
-        # else:
-            # members_model = []
+        if project_id:
+            contributors_model = contributors_model.filter(
+                project=Project.objects.get(id=project_id))
+        else:
+            contributors_model = []
 
-        members = [user_serializer(request, member_model.member)
-                   for member_model in members_model]
+        contributors = []
+        for contributor_model in contributors_model:
+            contributor = serialized_data(request, contributor_model, {'is_multiple': False})
+            contributor['user'] = user_serializer(request, contributor_model.user)
+            contributors.append(contributor)
 
-        return JsonResponse({'members': members}, status=200)
+        return JsonResponse({'contributors': contributors}, status=200)
 
     def post(self, request):
 
@@ -79,16 +81,21 @@ class TeamMemberAPI(API_View):
         except (UnauthorizedError) as e:
             return JsonResponse(**e.response_context)
 
-        data = self.get_data(request)
-        team_id = data['team_id']
-        members = data['members']
+        data: dict = self.get_data(request)
+        project_id: int = data['project_id']
+        contributors: list[int] = data['contributors']
 
-        # team = Team.objects.get(id=team_id)
-        team_members = []
-        # for member in members:
-            # team_member_model = self.model_cls.objects.create(
-                # team=team, member=User.objects.get(id=member))
-            # team_members.append(user_serializer(
-                # request, team_member_model.member))
+        project = Project.objects.get(id=project_id)
+        project_contributors = []
 
-        return JsonResponse({'members': team_members}, status=200)
+        for contributor in contributors:
+            user_model = User.objects.get(id=contributor)
+            contributor_model = self.model_cls.objects.create(
+                project=project,
+                user=user_model
+            )
+            contributor = serialized_data(request, contributor_model, {'is_multiple': False})
+            contributor['user'] = user_serializer(request, user_model)
+            project_contributors.append(contributor)
+
+        return JsonResponse({'contributors': project_contributors}, status=200)
