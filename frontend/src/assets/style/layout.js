@@ -3,7 +3,8 @@ import { css } from 'styled-components';
 export default css`
 	padding: 0 5rem;
 	margin: auto;
-	max-width: 1280px;
+	width: 1280px;
+	max-width: 90%;
 
 	@media screen and (max-width: 800px) {
 		padding: 0 3rem;
