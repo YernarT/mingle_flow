@@ -65,10 +65,10 @@ export default function App() {
 				component: lazy(() => import('@/pages/EditProfilePage')),
 			},
 			{
-				key: '/team',
-				path: '/team',
+				key: '/project',
+				path: '/project',
 				exact: true,
-				component: lazy(() => import('@/pages/TeamPage')),
+				component: lazy(() => import('@/pages/ProjectPage')),
 			},
 			{
 				key: '/task',
