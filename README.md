@@ -36,7 +36,7 @@
 
 1. 进入 backend 目录
 
-2. 下载依赖: 命令行工具输入 `pip install -r requirements.txt`
+2. 下载依赖: 命令行工具输入 `pipenv install`
 
 3. 运行服务器: 命令行工具输入 `python manage.py runserver`
 
