@@ -6,6 +6,8 @@ import { commonLayoutStyle } from '@/assets/style';
 const { Header } = Layout;
 
 const mobileHeaderStyle = css`
+	user-select: none;
+	
 	.mobile-header,
 	.mobile-header-trigger {
 		display: none;
