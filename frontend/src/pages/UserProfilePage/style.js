@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { scrollStyle } from '@/assets/style';
 
 export const UserProfileStyled = styled.div`
+	.ant-typography {
+		color: rgba(0, 0, 0, 0.85) !important;
+	}
+
 	display: flex;
 	flex-direction: column;
 	gap: 40px;

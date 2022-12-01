@@ -94,13 +94,13 @@ export default function ProjectPage() {
 						display: 'flex',
 						justifyContent: 'flex-end',
 					}}>
-					<Button
+					{/* <Button
 						type="primary"
 						onClick={() => {
 							setState({ showReportVisible: true });
 						}}>
 						Отчет
-					</Button>
+					</Button> */}
 
 					<ShowReportModal
 						visible={state.showReportVisible}

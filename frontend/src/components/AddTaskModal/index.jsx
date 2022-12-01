@@ -57,7 +57,7 @@ export default function AddTaskModal({ visible, onCancel, afterAdd, project }) {
 			end_time: values['time-range'][1].format('YYYY-MM-DD HH:mm:ss'),
 			funds: values.funds,
 			project: project.id,
-			responsibles: values.responsibles,
+			responsibles: values.responsibles || [],
 		};
 
 		runAsync(data)

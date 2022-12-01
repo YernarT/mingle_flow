@@ -19,11 +19,13 @@ import {
 	Empty,
 	Card,
 	Descriptions,
+	Skeleton,
 } from 'antd';
+import { DollarCircleOutlined, SendOutlined } from '@ant-design/icons';
 import { AddSubmissionModal } from '@/components';
 import { TaskPageStyled, SubmissionList } from './style';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 export default function TaskPage() {
 	const [user, setUser] = useRecoilState(userAtom);
@@ -101,6 +103,29 @@ export default function TaskPage() {
 						{state.task.description || 'Сипаттама жоқ'}
 					</Descriptions.Item>
 				</Descriptions>
+
+				{/* <Skeleton active loading={loadingGetTasks}>
+					<TasksStyled>
+						{state.tasks.map(task => (
+							<TaskItemStyled key={task.id}>
+								<Card title={task.name}>
+									<Text strong>
+										<DollarCircleOutlined /> {task.funds} ₸
+									</Text>
+
+									<Button
+										icon={<SendOutlined />}
+										onClick={() => {
+											history.push('/task', { task });
+										}}
+									/>
+								</Card>
+							</TaskItemStyled>
+						))}
+
+						{state.tasks.length === 0 && <Empty description="Жоқ" />}
+					</TasksStyled>
+				</Skeleton> */}
 
 				{state.task.creator !== user.id && (
 					<Button

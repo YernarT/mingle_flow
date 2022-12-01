@@ -201,7 +201,7 @@ export default function UserProfilePage() {
 						<Skeleton active loading={loadingGetTasks}>
 							<TasksStyled>
 								{state.tasks
-									.filter(task => task.creator === user.id)
+									.filter(task => task.creator.id === user.id)
 									.map(task => (
 										<TaskItemStyled key={task.id}>
 											<Card title={task.name}>
@@ -219,7 +219,7 @@ export default function UserProfilePage() {
 										</TaskItemStyled>
 									))}
 
-								{state.tasks.filter(task => task.creator === user.id).length ===
+								{state.tasks.filter(task => task.creator.id === user.id).length ===
 									0 && <Empty description="Жоқ" />}
 							</TasksStyled>
 						</Skeleton>
@@ -229,7 +229,7 @@ export default function UserProfilePage() {
 						<Skeleton active loading={loadingGetTasks}>
 							<TasksStyled>
 								{state.tasks
-									.filter(task => task.creator !== user.id)
+									.filter(task => task.creator.id !== user.id)
 									.map(task => (
 										<TaskItemStyled key={task.id}>
 											<Card title={task.name}>
@@ -247,7 +247,7 @@ export default function UserProfilePage() {
 										</TaskItemStyled>
 									))}
 
-								{state.tasks.filter(task => task.creator !== user.id).length ===
+								{state.tasks.filter(task => task.creator.id !== user.id).length ===
 									0 && <Empty description="Жоқ" />}
 							</TasksStyled>
 						</Skeleton>
