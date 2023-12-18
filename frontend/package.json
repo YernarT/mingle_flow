@@ -16,9 +16,7 @@
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
     "vue-hooks-plus": "1.8.2",
-    "vue-i18n": "^9.3.0",
-    "vue-router": "^4.2.4",
-    "xlsx": "^0.18.5"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",
