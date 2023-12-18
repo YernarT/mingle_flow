@@ -1,7 +1,5 @@
 /**
  * 高度自定义的 `localStorage` 工具函数
- * Highly customizable `localStorage` utility functions
- *
  *
  * 主要用于
  *     1. `recoil atom` 的初始化定义
@@ -13,56 +11,87 @@
  *     读取数据后, 会先调用一次 `deserializer`
  *     内置了版本检测, 需要在每次 `deploy` 至服务器时 手动修改版本号
  *
+ * 修改时间: 2022-07-17
  */
 
- export const localStorage = {
-	get(key, defaultValue, deserializer) {
+export interface localStorageProperties {
+	// 读
+	get<T>(
+		key: string,
+		// 默认值
+		defaultValue: T,
+		// 反序列化方法
+		deserializer?: (value: string) => T,
+	): T;
+	// 写
+	set<T>(
+		key: string,
+		// 储存值
+		value: T,
+		// 序列化方法
+		serializer?: (value: T) => string,
+	): void;
+
+	// 数据前缀, 用于和其他数据做区分 (建议: 项目名)
+	_DATA_PREFIX: string;
+	// 版本号
+	_DATA_VERSION: string;
+	// 版本号标记 字符串
+	_VERSION_MARK_STRING: string;
+	// 检测版本号
+	_checkDataVersion: (data: string) => boolean;
+}
+
+export const localStorage: localStorageProperties = {
+	get(key, defaultValue, deserializer?) {
+		if (!window) return defaultValue;
+
 		let data = window.localStorage.getItem(key);
 
 		// key 存在
-		// key exists
 		if (data) {
 			// 检测版本号
 			if (this._checkDataVersion(data)) {
 				// 移除版本号信息
-				// remove version information
-				data = data.replace(this._VERSION_MARK_RegExp, '');
+				data = data.replace(this._VERSION_MARK_STRING, '');
 
 				let deserializedData;
 				// 执行反序列化
 				try {
 					deserializedData = deserializer?.(data) ?? JSON.parse(data);
 				} catch (error) {
-					// deserialization exception
 					console.error(`localStorage.get 反序列化异常: \n${error}`);
 					deserializedData = defaultValue;
 				}
 
 				return deserializedData;
 			}
+			console.warn('本地数据版本不一致');
 		}
 
+		console.warn('本地数据不存在');
 		return defaultValue;
 	},
 
-	set(key, value, serializer) {
+	set(key, value, serializer?) {
+		if (!window) return;
+
 		// 执行序列化
 		let serializedValue = serializer?.(value) ?? JSON.stringify(value);
 		// 记录版本号
-		// Record version
 		let serializedData = `${this._DATA_PREFIX}=${this._DATA_VERSION};${serializedValue}`;
 
 		window.localStorage.setItem(key, serializedData);
 	},
 
-	_DATA_PREFIX: 'pms',
+	_DATA_PREFIX: 'MingleFlow',
 	_DATA_VERSION: '1.0.0',
 
-	get _VERSION_MARK_RegExp() {
-		return new RegExp(`^${this._DATA_PREFIX}=${this._DATA_VERSION};`);
+	get _VERSION_MARK_STRING() {
+		return `${this._DATA_PREFIX}=${this._DATA_VERSION};`;
 	},
 
 	_checkDataVersion(data) {
-		return this._VERSION_MARK_RegExp.test(data);
+		return data.startsWith(this._VERSION_MARK_STRING);
 	},
 };
