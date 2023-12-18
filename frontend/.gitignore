@@ -1,46 +1,23 @@
-# logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Nuxt dev/build outputs
+.output
+.nuxt
+.nitro
+.cache
+dist
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# dependencies
+# Node dependencies
 node_modules
 
-# output of 'npm pack'
-*.tgz
+# Logs
+logs
+*.log
 
-# yarn integrity file
-.yarn-integrity
+# Misc
+.DS_Store
+.fleet
+.idea
 
-# misc 
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# production
-dist
-dist-ssr
-build
-*firebase*
+# Local env files
+.env
+.env.*
+!.env.example
