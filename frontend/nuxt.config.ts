@@ -9,11 +9,16 @@ export default defineNuxtConfig({
   },
 
   css: [
+    // Global style, classes
     "~/assets/style/variables.css",
     "~/assets/style/reset.css",
-    // Global class
-    "~/assets/style/itisit-icon.css",
+    "~/assets/style/itisit-container.css",
+    "~/assets/style/antd.css",
   ],
 
   modules: ["@pinia/nuxt", "nuxt-icon", "nuxt-lodash"],
+
+  app: {
+    pageTransition: { name: "page", mode: "out-in" },
+  },
 });
