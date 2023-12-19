@@ -1,0 +1,49 @@
+.itisit-container {
+  max-width: 1620px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16%;
+  padding-right: 16%;
+}
+
+@media screen and (max-width: 1400px) {
+  .itisit-container {
+    padding-left: 14%;
+    padding-right: 14%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .itisit-container {
+    padding-left: 12%;
+    padding-right: 12%;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .itisit-container {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .itisit-container {
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .itisit-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media screen and (max-width: 345px) {
+  .itisit-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

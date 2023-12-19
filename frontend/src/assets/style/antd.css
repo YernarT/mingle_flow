@@ -1,0 +1,62 @@
+/* Antd 样式覆盖 */
+
+.ant-popconfirm .ant-popconfirm-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.ant-btn {
+  padding: 2px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-popconfirm .ant-popconfirm-buttons .ant-btn {
+  padding: 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-popconfirm .ant-popconfirm-buttons .ant-btn span {
+  font-size: 16px;
+}
+
+.add-cargo-dropdown .ant-dropdown-menu {
+  padding: 12px 6px;
+}
+
+.add-cargo-dropdown .ant-dropdown-menu .ant-dropdown-menu-item {
+  background-color: #fff !important;
+}
+
+.add-cargo-dropdown
+  .ant-dropdown-menu
+  .ant-dropdown-menu-item:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.add-cargo-dropdown
+  .ant-dropdown-menu
+  .ant-dropdown-menu-item
+  .ant-dropdown-menu-title-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ant-modal-header {
+  margin-bottom: 16px;
+}
+.ant-modal-header .ant-modal-title {
+  font-weight: 500;
+}
+
+@media screen and (max-width: 720px) {
+  .ant-modal-wrap {
+    max-height: calc(100dvh - 72px);
+  }
+}
