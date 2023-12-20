@@ -85,11 +85,17 @@
   }
 }
 
-@mixin useFont($size: 20px, $weight: 400, $color: var(--c-text)) {
+@mixin useFont(
+  $size: 20px,
+  $weight: 400,
+  $height: 1.36,
+  $color: var(--c-text)
+) {
   /* 全局字体 */
   font-family: "Ubuntu", sans-serif;
   font-size: $size;
   font-weight: $weight;
+  line-height: $height;
   font-display: swap;
   color: $color;
   text-rendering: optimizeLegibility;
