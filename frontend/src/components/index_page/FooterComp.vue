@@ -3,7 +3,7 @@
         <div class="itisit-container top">
             <div class="left">
                 <div class="logo">
-                    <img src="~/assets/image/logo.png" alt="Mingle Flow">
+                    <img src="/image/logo.png" alt="Mingle Flow">
                     <span>Mingle Flow</span>
                 </div>
                 <span>Ұйымның әр минутын үнемдеу</span>
