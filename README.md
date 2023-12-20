@@ -16,3 +16,9 @@
 - 后端
   - `Python` 3.10.11
   - `Django` 3.2.8
+
+---
+
+## 截屏
+
+<img src="./screenshot/index_page_design.png" alt="Index page design" />
