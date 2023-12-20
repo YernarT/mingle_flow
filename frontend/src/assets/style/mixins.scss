@@ -103,7 +103,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin maxRow($rowCount: 2, $rowHeight: 1.31) {
+@mixin maxRow($rowCount: 2, $rowHeight: 1.36) {
   overflow: hidden;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
