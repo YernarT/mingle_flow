@@ -1,6 +1,6 @@
 <template>
     <section class="design-section">
-        <img class="design" src="~/assets/image/index_page_design.png" alt="Design">
+        <img class="design" src="/image/index_page_design.png" alt="Design">
     </section>
 </template>
 
@@ -26,7 +26,7 @@ defineComponent({ name: 'DesignSection' });
         max-width: 1030px;
         margin: 0 auto;
         border-radius: var(--border-radius);
-        box-shadow: rgba(255, 66, 122, 0.2) 0px 2px 8px 0px;
+        box-shadow: rgba(255, 66, 122, 0.2) 0 2px 8px 0;
     }
 
     @media screen and (max-width: 576px) {
