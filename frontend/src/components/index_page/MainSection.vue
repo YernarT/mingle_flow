@@ -11,8 +11,8 @@
             Mingle Flow = Топтық ынтымақтастық + Процесті басқару
         </p>
         <div class="auth-btns">
-            <a-button type="primary">Бастау</a-button>
-            <a-button>Тіркелу</a-button>
+            <a-button type="primary" @click="$router.push(userStore.isAuthenticated ? '' : '/auth/login')">Бастау</a-button>
+            <a-button @click="$router.push('/auth/login')">Тіркелу</a-button>
         </div>
     </section>
 </template>
@@ -20,8 +20,12 @@
 <script setup lang="ts">
 // Vue
 import { defineComponent } from 'vue';
+// Store
+import { useUser } from '@/stores/user';
 
 defineComponent({ name: 'MainSection' });
+
+const userStore = useUser();
 </script>
 
 <style scoped lang="scss">

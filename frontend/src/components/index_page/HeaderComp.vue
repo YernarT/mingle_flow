@@ -6,21 +6,21 @@
         </div>
 
         <div class="menu">
-            <div class="icon-btn">
+            <div class="icon-btn" @click="toNotification">
                 <Icon name="material-symbols:notifications-sharp" />
             </div>
-            <div class="icon-btn">
+            <div class="icon-btn" @click="toSettings">
                 <Icon name="material-symbols:settings" />
             </div>
 
             <div class="user-block">
                 <!-- 动态获取 Public 目录下的资源 -->
-                <img :src="userStore.isAuthenticated ? userStore.avatar : '/image/unauthorized_user_avatar.jpg'" alt="Avatar"
-                    class="avatar" />
+                <img :src="userStore.isAuthenticated ? userStore.avatar : '/image/unauthorized_user_avatar.jpg'"
+                    alt="Avatar" class="avatar" @click="toSettings" />
 
                 <div class="info">
-                    <span class="username">Yernar Toktar</span>
-                    <span class="email">toktaryernar@gmail.com</span>
+                    <span class="username">{{ userStore.isAuthenticated ? userStore.fullname : 'Авторизациясыз' }}</span>
+                    <span class="email">{{ userStore.isAuthenticated ? userStore.email : '' }}</span>
                 </div>
             </div>
         </div>
@@ -32,12 +32,29 @@
 <script setup lang="ts">
 // Vue
 import { defineComponent } from 'vue';
+// Router
+import { useRouter } from 'vue-router';
 // Store
 import { useUser } from '@/stores/user';
+// Antd
+import { message as AntdMessage } from 'ant-design-vue';
 
 defineComponent({ name: 'HeaderComp' });
 
 const userStore = useUser();
+const $router = useRouter();
+
+const hasAuthentication = () => {
+    if (!userStore.isAuthenticated) {
+        AntdMessage.info('Авторизациясыз, әрекетке рұқсат жоқ');
+        return false;
+    }
+
+    return true;
+}
+
+const toNotification = () => hasAuthentication() && $router.push('/profile?tab=notification');
+const toSettings = () => hasAuthentication() && $router.push('/profile?tab=settings');
 </script>
 
 <style scoped lang="scss">
