@@ -1,9 +1,8 @@
 <template>
-    <HeaderComp />
-
     <main class="itisit-container profile-page">
+        <HeaderComp />
+        
         <h3 class="title">Жеке кабинет</h3>
-
         <a-tabs v-model:activeKey="tab" :onChange="handleChangeTab">
             <a-tab-pane key="settings">
                 <template #tab>
