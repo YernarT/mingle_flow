@@ -1,28 +1,30 @@
 <template>
-    <main class="itisit-container profile-page">
+    <main class="profile-page">
         <HeaderComp />
-        
-        <h3 class="title">Жеке кабинет</h3>
-        <a-tabs v-model:activeKey="tab" :onChange="handleChangeTab">
-            <a-tab-pane key="settings">
-                <template #tab>
-                    <span>
-                        <Icon name="material-symbols:settings-outline-rounded" />
-                        Ақпарат
-                    </span>
-                </template>
-                <ProfileSettings />
-            </a-tab-pane>
-            <a-tab-pane key="notification">
-                <template #tab>
-                    <span>
-                        <Icon name="material-symbols:notifications-outline" />
-                        Хабарландыру
-                    </span>
-                </template>
-                <ProfileNotification />
-            </a-tab-pane>
-        </a-tabs>
+
+        <div class="itisit-container">
+            <h3 class="title">Жеке кабинет</h3>
+            <a-tabs v-model:activeKey="tab" :onChange="handleChangeTab">
+                <a-tab-pane key="settings">
+                    <template #tab>
+                        <span>
+                            <Icon name="material-symbols:settings-outline-rounded" />
+                            Ақпарат
+                        </span>
+                    </template>
+                    <ProfileSettings />
+                </a-tab-pane>
+                <a-tab-pane key="notification">
+                    <template #tab>
+                        <span>
+                            <Icon name="material-symbols:notifications-outline" />
+                            Хабарландыру
+                        </span>
+                    </template>
+                    <ProfileNotification />
+                </a-tab-pane>
+            </a-tabs>
+        </div>
     </main>
 </template>
   
@@ -60,8 +62,6 @@ const handleChangeTab = (activeKey: 'settings' | 'notification') => {
 @import "~/assets/style/mixins.scss";
 
 .profile-page {
-    @include flex($direction: column);
-
     .title {
         margin: 32px 0;
         font-size: 36px;
