@@ -1,6 +1,6 @@
 <template>
     <header class="itisit-container header">
-        <div class="logo">
+        <div class="logo" @click="$router.push('/')">
             <img src="/image/logo.png" alt="Mingle Flow">
             <span>Mingle Flow</span>
         </div>
@@ -65,6 +65,7 @@ const toSettings = () => hasAuthentication() && $router.push('/profile?tab=setti
     @include flex($alignItems: center);
 
     .logo {
+        cursor: pointer;
         @include flex($alignItems: center, $gap: 8px);
 
         img {
