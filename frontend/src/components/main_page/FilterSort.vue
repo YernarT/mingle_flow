@@ -61,14 +61,20 @@ const changeSort = (sortValue: string) => {
             &::before {
                 content: "";
                 display: block;
-                width: 4px;
-                height: 4px;
+                width: 0;
+                height: 0;
                 border-radius: 50%;
                 background-color: var(--c-text);
+                transition: width var(--transition), height var(--transition);
             }
 
             &--active {
                 color: var(--c-text);
+
+                &::before {
+                    width: 4px;
+                    height: 4px;
+                }
             }
         }
     }
@@ -94,6 +100,11 @@ const changeSort = (sortValue: string) => {
                 height: 16px;
             }
         }
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 860px) {
+        flex-direction: column;
     }
 }
 </style>
