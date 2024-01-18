@@ -1,21 +1,26 @@
 from django.db import models
 
+class TaskPriority(models.IntegerChoices):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    URGENT = 4
 
 class Task(models.Model):
-
     name = models.CharField(max_length=40, verbose_name='Тапсырма атауы')
     description = models.CharField(
-        max_length=520, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
+        max_length=500, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
     start_time = models.DateTimeField(verbose_name='Бастау уақыт')
     end_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
-    funds = models.PositiveIntegerField(verbose_name='Бөлінген қаржы')
-    is_finished = models.BooleanField(
-        default=False, verbose_name='Тапсырма аяқталған')
-
+    priority = models.IntegerChoices(choices=TaskPriority, verbose_name='Басымдық')
+    tags = models.CharField(max_length=520, verbose_name='Тег')
+    finish_time = models.DateTimeField(null=True, blank=True, defualt=None, verbose_name='Тапсырма аяқталған уақыт')
     project = models.ForeignKey(
         'project.Project', on_delete=models.CASCADE, verbose_name='Жоба')
     creator = models.ForeignKey(
-        'user.User', on_delete=models.CASCADE, verbose_name='Құрушы')
+        'user.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тапсыпма құрушы')
+    update_time = models.DateTimeField(
+        auto_now=True, verbose_name='Жаңартылған уақыт')
     create_time = models.DateTimeField(
         auto_now_add=True, verbose_name='Құрылған уақыт')
 
@@ -27,16 +32,14 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
-
-class TaskPrincipal(models.Model):
-
+class TaskWorker(models.Model):
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
-    user = models.ForeignKey(
+    worker = models.ForeignKey(
         'user.User', on_delete=models.CASCADE, verbose_name='Жауапты мүше')
 
     class Meta:
-        db_table = 'task_principal'
+        db_table = 'task_workder'
         verbose_name = 'Жауапты мүше'
         verbose_name_plural = 'Жауапты мүшелер'
 
@@ -44,23 +47,37 @@ class TaskPrincipal(models.Model):
         return self.task.name
 
 
-class SubmittedResult(models.Model):
-
+class TaskAttachement(models.Model):
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
-    description = models.TextField(
-        max_length=5000, null=True, blank=True, verbose_name='Нәтиже сипаттамасы')
-    file = models.FileField(upload_to='task/result/',
-                            null=True, verbose_name='Қосымша құжат')
-    submitter = models.ForeignKey(
-        'user.User', on_delete=models.CASCADE, verbose_name='Тапсырушы')
-    submitted_time = models.DateTimeField(
-        auto_now_add=True, verbose_name='Тапсыған уақыт')
-
+    uploader = models.ForeignKey(
+        'user.User', on_delete=models.CASCADE, verbose_name='Жүкеуші')
+    file = models.FileField(upload_to='task/attachement/',
+                            null=True, verbose_name='Тіркеме')
+    create_time = models.DateTimeField(
+        auto_now_add=True, verbose_name='Құрылған уақыт')
+    
     class Meta:
-        db_table = 'submitted_result'
-        verbose_name = 'Тапсырма Нәтижесі'
-        verbose_name_plural = 'Тапсырма Нәтижелері'
+        db_table = 'task_attachement'
+        verbose_name = 'Тапсырма тіркемесі'
+        verbose_name_plural = 'Тапсырма тіркемелері'
+
+    def __str__(self):
+        return self.task.name
+    
+class TaskComment(models.Model):
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
+    user = models.ForeignKey(
+        'user.User', on_delete=models.CASCADE, verbose_name='Пайдаланушы')
+    content = models.CharField(max_length=520, verbose_name='Пікір')
+    create_time = models.DateTimeField(
+        auto_now_add=True, verbose_name='Құрылған уақыт')
+    
+    class Meta:
+        db_table = 'task_comment'
+        verbose_name = 'Тапсырма пікірі'
+        verbose_name_plural = 'Тапсырма пікірлері'
 
     def __str__(self):
         return self.task.name
