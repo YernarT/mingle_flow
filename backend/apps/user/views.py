@@ -1,118 +1,104 @@
-from django.http import JsonResponse
-from django.contrib.auth.hashers import check_password
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED
+
 
 from user.models import User
-from user.serializer import user_list_serializer, user_serializer
+from user.serializer import UserSerializer, LoginSerializer, RegisterSerializer
 
-from utils.auth import get_jwt
-from utils.request_middleware import API_View
-from utils.error import UnauthorizedError
-
-
-class LoginAPI(API_View):
-    model_cls = User
-    query_set = User.objects.all()
-
-    def post(self, request):
-        data = self.get_data(request)
-        username = data['username']
-        password = data['password']
-
-        try:
-            user_model = self.query_set.get(username=username)
-        except User.DoesNotExist:
-            return JsonResponse({'message': 'Авторизация сәтсіз болды'}, status=400)
-
-        if check_password(password, user_model.password):
-            return JsonResponse({'message': 'авторизация сәтті болды',
-                                 'access_token': get_jwt(user_model.id),
-                                 'user': user_serializer(request, user_model)
-                                 }, status=200)
-
-        return JsonResponse({'message': 'Авторизация сәтсіз болды'}, status=400)
+from utils.jwt import create_jwt
+from utils.authentication import LoginRequiredAuthentication
 
 
-class RegisterAPI(API_View):
-    model_cls = User
-    query_set = User.objects.all()
+class UserViewSet(ModelViewSet):
+    """
+    用户 API 类
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-    def post(self, request):
-        data = self.get_data(request)
-        username = data['username']
+    def get_authenticators(self):
+        if self.request.method != 'POST':
+            return [LoginRequiredAuthentication()]
 
-        try:
-            have_same_username_user = self.query_set.get(username=username)
-        except self.model_cls.DoesNotExist:
-            have_same_username_user = False
+        return super().get_authenticators()
 
-        if have_same_username_user:
-            return JsonResponse({'message': 'Пайдаланушы атауы тіркелген'}, status=400)
+    def get_serializer_context(self):
+        """
+        更新上下文对象
+        对玩家做 增删改查 时, 需要确认权限
+        """
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
 
-        user_model = self.model_cls.objects.create(**data)
+        return context
 
-        return JsonResponse({'message': 'Тіркелу сәтті аяқталды',
-                             'access_token': get_jwt(user_model.id),
-                             'user': user_serializer(request, user_model)
-                             }, status=201)
+    def create(self, request, *args, **kwargs):
+        """
+        创建玩家后, 携带返回 `token` 令牌
+        """
+        response = super().create(request, *args, **kwargs)
+        response.data['token'] = create_jwt({'uid': response.data['id']})
 
-
-class UserAPI(API_View):
-    model_cls = User
-    query_set = User.objects.all()
-
-    def get(self, request):
-        serialized_users, _ = self.get_base_query_set(
-            request, user_list_serializer)
-        
-        return JsonResponse({'users': serialized_users}, status=200)
-
-    def put(self, request):
-
-        try:
-            user = self.get_user(request)['model']
-        except (UnauthorizedError) as e:
-            return JsonResponse(**e.response_context)
-
-        data = self.get_data(request)
-        username = data['username']
-
-        try:
-            have_same_username_user = self.query_set.get(username=username)
-        except User.DoesNotExist:
-            have_same_username_user = False
-
-        if have_same_username_user:
-            return JsonResponse({'message': 'Пайдаланушы атауы бос емес'}, status=400)
-
-        user.username = username
-        user.save()
-
-        return JsonResponse({
-            'username': username,
-            'message': 'Сәтті өзгертілді'
-        }, status=200)
+        return response
 
 
-class UserAvatarAPI(API_View):
-    model_cls = User
-    query_set = User.objects.all()
+class LoginAPIView(APIView):
+    """
+    登录 API 类
+    """
 
     def post(self, request):
-        try:
-            user = self.get_user(request)['model']
-        except (UnauthorizedError) as e:
-            return JsonResponse(**e.response_context)
+        serializer = LoginSerializer(data=request.data)
+        # 校验 登录数据 合法性
+        serializer.is_valid(raise_exception=True)
+        # 校验 登录数据 正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
+        user = serializer.is_correct()
+        # jwt 令牌
+        token = create_jwt({'uid': user.id})
+        # User模型 反序列化数据
+        data = UserSerializer(instance=user).data
+        data['token'] = token
 
-        avatar = request.FILES.get('avatar')
+        return Response(data)
 
-        if not avatar:
-            return JsonResponse({
-                'message': 'Суретді жүктеу керек'
-            }, status=400)
 
-        user.avatar = avatar
-        user.save()
+class LoginAPIView(APIView):
+    """
+    登录 API 类
+    """
 
-        return JsonResponse({
-            'avatar': user_serializer(request, user)['avatar']
-        }, status=201)
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        # 校验数据合法性
+        serializer.is_valid(raise_exception=True)
+        # 校验数据正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
+        user = serializer.is_correct()
+        # jwt 令牌
+        token = create_jwt({'uid': user.id})
+        # User模型 反序列化数据
+        data = UserSerializer(instance=user).data
+        data['token'] = token
+
+        return Response({data: data, 'Formatted': 1})
+
+
+class RegisterAPIView(APIView):
+    """
+    注册 API 类
+    """
+
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        # 校验数据合法性
+        serializer.is_valid(raise_exception=True)
+        # 校验数据正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
+        user = serializer.register()
+        # jwt 令牌
+        token = create_jwt({'uid': user.id})
+        # User模型 反序列化数据
+        data = UserSerializer(instance=user).data
+        data['token'] = token
+
+        return Response({data: data, 'Formatted': 1})

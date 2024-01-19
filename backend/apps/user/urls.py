@@ -1,13 +1,23 @@
-from django.conf.urls import url
-from user.views import LoginAPI, RegisterAPI, UserAPI, UserAvatarAPI
+from django.urls import path
+from rest_framework import routers
+from django.conf import settings
 
+from user.views import UserViewSet, LoginAPIView, RegisterAPIView
 
-urlpatterns = [
-    url(r'^user/login/$', LoginAPI.as_view()),
-    url(r'^user/register/$', RegisterAPI.as_view()),
+if settings.DEBUG:
+    router = routers.DefaultRouter()
+else:
+    router = routers.SimpleRouter()
 
-    url(r'^user/$', UserAPI.as_view()),
-    url(r'^user/upload_avatar/$', UserAvatarAPI.as_view()),
+router.register(r'user', UserViewSet)
+
+urlpatterns = router.urls
+
+urlpatterns += [
+    # 登录接口
+    path('auth/login/', LoginAPIView.as_view()),
+    # 注册接口
+    path('auth/register/', RegisterAPIView.as_view()),
 ]
 
 app_name = 'user'
