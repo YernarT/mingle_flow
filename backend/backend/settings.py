@@ -52,12 +52,13 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'utils.response_format.ResponseFormatMiddleware'
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -141,3 +142,14 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DRF Config
+REST_FRAMEWORK = {
+    # Custom catch API exception
+    'EXCEPTION_HANDLER': 'utils.custom_exception.custom_exception_handler',
+
+    # Global authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'utils.authentication.JWTAuthentication',
+    ],
+}
