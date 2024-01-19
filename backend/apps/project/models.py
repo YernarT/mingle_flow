@@ -11,7 +11,7 @@ class Project(models.Model):
     name = models.CharField(max_length=40, verbose_name='Жоба атауы')
     description = models.CharField(
         max_length=500, null=True, blank=True, verbose_name='Жоба сипаттамасы')
-    status = models.IntegerChoices(choices=ProjectStatuses, default=ProjectStatuses.PLANNING)
+    status = models.IntegerField(choices=ProjectStatuses.choices, default=ProjectStatuses.PLANNING)
     creator = models.ForeignKey('user.User', on_delete=models.CASCADE, verbose_name='Құрушы')
     create_time = models.DateTimeField(
         auto_now_add=True, verbose_name='Құрылған уақыт')
@@ -28,7 +28,7 @@ class Project(models.Model):
 class Contributor(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Жоба')
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, verbose_name='Мүше')
-    can_modify_task = models.BooleanField(default=False, verbose='Тапсырма құруға/өзгертуге болады')
+    can_modify_task = models.BooleanField(default=False, verbose_name='Тапсырма құруға/өзгертуге болады')
     join_time = models.DateTimeField(
         auto_now_add=True, verbose_name='Қосылған уақыт')
 

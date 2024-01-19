@@ -12,9 +12,9 @@ class Task(models.Model):
         max_length=500, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
     start_time = models.DateTimeField(verbose_name='Бастау уақыт')
     end_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
-    priority = models.IntegerChoices(choices=TaskPriority, verbose_name='Басымдық')
+    priority = models.IntegerField(choices=TaskPriority.choices, verbose_name='Басымдық')
     tags = models.CharField(max_length=520, verbose_name='Тег')
-    finish_time = models.DateTimeField(null=True, blank=True, defualt=None, verbose_name='Тапсырма аяқталған уақыт')
+    finish_time = models.DateTimeField(null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
     project = models.ForeignKey(
         'project.Project', on_delete=models.CASCADE, verbose_name='Жоба')
     creator = models.ForeignKey(
