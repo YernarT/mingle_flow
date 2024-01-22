@@ -6,8 +6,10 @@ from django.contrib.auth.hashers import make_password
 
 class User(models.Model):
 
-    username = models.CharField(
-        max_length=24, unique=True, verbose_name='Аты-жөн')
+    email = models.CharField(
+        max_length=64, unique=True, verbose_name='Email')
+    fullname = models.CharField(
+        max_length=24, verbose_name='Аты-жөн')
     password = models.CharField(max_length=254, verbose_name='Құпия сөз')
     avatar = models.FileField(upload_to='user/avatar/',
                               null=True, blank=True, verbose_name='Аватар')
@@ -20,7 +22,7 @@ class User(models.Model):
         verbose_name_plural = 'Пайдаланушылар'
 
     def __str__(self):
-        return self.username
+        return self.fullname
 
 
 @receiver(pre_save, sender=User)
@@ -35,7 +37,7 @@ def user_pre_save(sender, instance, **kwargs):
         user = sender.objects.get(id=instance.id)
     except sender.DoesNotExist:
         user = False
-    
+
     if user and user.avatar != instance.avatar:
         user.avatar.delete(save=False)
 

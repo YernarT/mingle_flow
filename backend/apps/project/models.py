@@ -38,4 +38,4 @@ class Contributor(models.Model):
         verbose_name_plural = 'Мүшелер'
 
     def __str__(self):
-        return self.user.username
+        return self.user.fullname
