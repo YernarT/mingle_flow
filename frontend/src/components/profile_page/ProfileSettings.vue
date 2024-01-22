@@ -9,7 +9,7 @@
                     <a-input v-model:value="basicInfoForm.fullname" maxLength="30" />
                 </a-form-item>
 
-                <a-form-item label="Телефон" name="phone"
+                <a-form-item label="Email" name="email"
                     :rules="[{ required: true, message: 'Телефон нөмерді енгізіңіз!' }]">
                     <a-input v-model:value="basicInfoForm.email" type="email" maxLength="254" />
                 </a-form-item>
@@ -81,8 +81,8 @@ const { runAsync: changePassword, loading: changePasswordLoading } = useRequest(
 
 const handleChangeInfo = (values: any) => {
     updateInfo(user.id, values).then(({ data }) => {
-        localStorage.set('user', data);
-        user.$state = data;
+        localStorage.set('user', { ...user.$state, ...data });
+        user.$state = { ...user.$state, ...data };
         AntdMessage.success('Өзгеріс сақталды!');
     }).catch(error => {
         AntdMessage.error(error.message);
@@ -100,7 +100,7 @@ const handleChangePassword = (values: any) => {
 const handleLogout = () => {
     localStorage.set('user', defaultUserState);
     user.$state = defaultUserState;
-    router.replace('/auth/login');
+    router.replace({ path: '/auth/login' });
 }
 </script>
 
@@ -108,36 +108,37 @@ const handleLogout = () => {
 @import "~/assets/style/mixins.scss";
 
 .profile-settings {
-    :deep(.auth-template) {
-        width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 24px;
+    padding-bottom: 16px;
+    @include flex($gap: 16px, $wrap: wrap);
 
-        .block {
-            flex: 0 1 320px;
+    .block {
+        flex: 0 1 320px;
+        max-width: 100%;
+        padding: 8px 16px 16px;
+        /* margin-bottom: 24px; */
+        border-radius: var(--border-radius);
+        border: 1px solid var(--c-border);
+
+        .head {
+            margin-bottom: 8px;
+        }
+
+        .ant-btn {
+            height: 44px;
+        }
+
+        .ant-form-item:last-child {
+            margin: 0;
         }
     }
-}
 
-.block {
-    max-width: 100%;
-    padding: 8px 16px 16px;
-    /* margin-bottom: 24px; */
-    border-radius: var(--border-radius);
-    border: 1px solid var(--c-border);
+    .logout-btn {
+        height: 44px;
+        @include flexCenter($gap: 8px);
 
-    .head {
-        margin-bottom: 8px;
-    }
-}
-
-.logout-btn {
-    height: 50px;
-    @include flexCenter($gap: 8px);
-
-    svg {
-        @include svgStyle($color: #fff);
+        svg {
+            @include svgStyle($color: #fff);
+        }
     }
 }
 </style>
