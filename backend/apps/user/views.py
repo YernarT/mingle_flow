@@ -5,7 +5,7 @@ from rest_framework.status import HTTP_201_CREATED
 
 
 from user.models import User
-from user.serializer import UserSerializer, LoginSerializer, RegisterSerializer
+from user.serializer import UserSerializer, LoginSerializer
 
 from utils.jwt import create_jwt
 from utils.authentication import LoginRequiredAuthentication
@@ -51,26 +51,6 @@ class LoginAPIView(APIView):
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
-        # 校验 登录数据 合法性
-        serializer.is_valid(raise_exception=True)
-        # 校验 登录数据 正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
-        user = serializer.is_correct()
-        # jwt 令牌
-        token = create_jwt({'uid': user.id})
-        # User模型 反序列化数据
-        data = UserSerializer(instance=user).data
-        data['token'] = token
-
-        return Response(data)
-
-
-class LoginAPIView(APIView):
-    """
-    登录 API 类
-    """
-
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
         # 校验数据合法性
         serializer.is_valid(raise_exception=True)
         # 校验数据正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
@@ -78,27 +58,8 @@ class LoginAPIView(APIView):
         # jwt 令牌
         token = create_jwt({'uid': user.id})
         # User模型 反序列化数据
-        data = UserSerializer(instance=user).data
+        data = UserSerializer(instance=user, context={'request': request}).data
         data['token'] = token
+        print(data)
 
-        return Response({data: data, 'Formatted': 1})
-
-
-class RegisterAPIView(APIView):
-    """
-    注册 API 类
-    """
-
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        # 校验数据合法性
-        serializer.is_valid(raise_exception=True)
-        # 校验数据正确性 (错误时会抛出 CustomExeption, 通过 middleware 捕获)
-        user = serializer.register()
-        # jwt 令牌
-        token = create_jwt({'uid': user.id})
-        # User模型 反序列化数据
-        data = UserSerializer(instance=user).data
-        data['token'] = token
-
-        return Response({data: data, 'Formatted': 1})
+        return Response({'data': data, 'Formatted': 1})
