@@ -1,9 +1,9 @@
-const isDev = false;
-const HOST = "http://127.0.0.1";
+const isDev = true;
+const HOST_Dev = "http://127.0.0.1";
 const HOST_Prod = "https://api.mingle-flow.kz";
 const PORT = "8000";
 
-const BASE_URL = isDev ? `${HOST}:${PORT}/api` : `${HOST_Prod}/api`;
+const BASE_URL = isDev ? `${HOST_Dev}:${PORT}/api` : `${HOST_Prod}/api`;
 
 // Types
 import type { I_Response, I_DefaultHeaders, HttpMethod } from "~/types/api";
@@ -68,13 +68,17 @@ function requestWithData(method: Exclude<HttpMethod, "GET">) {
     });
 
     if (response instanceof Response) {
-      data = await response.json().catch(()=>{});
+      data = await response.json().catch(() => {});
 
       if (response.status >= 200 && response.status < 300) {
         return convertKeysCase(data!, "camel") as any as I_Response<T>;
       }
 
-      return await Promise.reject(data);
+      return await Promise.reject({
+        isSuccess: false,
+        message: "apiError.500",
+        ...data,
+      });
     }
 
     return await Promise.reject(response);
@@ -111,7 +115,11 @@ export default {
         return convertKeysCase(data!, "camel") as any as I_Response<T>;
       }
 
-      return await Promise.reject(data);
+      return await Promise.reject({
+        isSuccess: false,
+        message: "apiError.500",
+        ...data,
+      });
     }
 
     return await Promise.reject(response);
