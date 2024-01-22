@@ -6,19 +6,15 @@ import type { I_User } from "~/types/user";
 import _fetch from "~/service/fetch";
 
 export const API_Login = (data: {
-  phone: string;
+  email: string;
   password: string;
 }): Promise<I_Response<I_User>> => _fetch.post("/auth/login/", data);
-
-export const API_Register = (
-  data: Omit<I_User, "id" | "token" | "createTime">
-): Promise<I_Response<I_User>> => _fetch.post("/auth/register/", data);
 
 export const API_UpdateInfo = (
   userId: number,
   data: {
-    phone?: string;
     fullname?: string;
+    email?: string;
   }
 ): Promise<I_Response<I_User>> => _fetch.patch(`/user/${userId}/`, data);
 
