@@ -27,5 +27,17 @@
     "nuxt-icon": "^0.4.2",
     "nuxt-lodash": "^2.5.0",
     "sass": "^1.63.6"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
