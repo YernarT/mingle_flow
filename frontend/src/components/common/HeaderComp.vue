@@ -15,11 +15,10 @@
 
             <div class="user-block">
                 <!-- 动态获取 Public 目录下的资源 -->
-                <img :src="userStore.isAuthenticated ? userStore.avatar : '/image/unauthorized_user_avatar.jpg'"
-                    alt="Avatar" class="avatar" @click="toSettings" />
+                <img :src="avatar" alt="Avatar" class="avatar" @click="toSettings" />
 
                 <div class="info">
-                    <span class="username">{{ userStore.isAuthenticated ? userStore.fullname : 'Авторизациясыз' }}</span>
+                    <span class="fullname">{{ userStore.isAuthenticated ? userStore.fullname : 'Авторизациясыз' }}</span>
                     <span class="email">{{ userStore.isAuthenticated ? userStore.email : '' }}</span>
                 </div>
             </div>
@@ -31,7 +30,7 @@
 
 <script setup lang="ts">
 // Vue
-import { defineComponent } from 'vue';
+import { defineComponent, computed } from 'vue';
 // Router
 import { useRouter } from 'vue-router';
 // Store
@@ -43,6 +42,14 @@ defineComponent({ name: 'HeaderComp' });
 
 const userStore = useUser();
 const $router = useRouter();
+
+const avatar = computed(() => {
+    if (userStore.isAuthenticated && userStore.avatar) {
+        return userStore.avatar
+    }
+
+    return '/image/unauthorized_user_avatar.jpg';
+});
 
 const hasAuthentication = () => {
     if (!userStore.isAuthenticated) {
@@ -144,7 +151,7 @@ const toSettings = () => hasAuthentication() && $router.push('/profile?tab=setti
                     @include maxRow($rowCount: 1);
                 }
 
-                .username {
+                .fullname {
                     font-weight: 500;
                 }
             }
