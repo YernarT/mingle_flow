@@ -35,5 +35,10 @@ defineComponent({ name: 'MainPage' });
         height: 44px;
         border-radius: 26px;
     }
+
+    /* Responsive */
+    @media screen and (max-width: 1140px) {
+        flex-direction: column;
+    }
 }
 </style>
