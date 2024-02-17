@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 // Vue
-import { defineComponent, computed } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 // Router
 import { useRouter } from 'vue-router';
 // Store
@@ -43,13 +43,13 @@ defineComponent({ name: 'HeaderComp' });
 const userStore = useUser();
 const $router = useRouter();
 
-const avatar = computed(() => {
-    if (userStore.isAuthenticated && userStore.avatar) {
-        return userStore.avatar
-    }
-
-    return '/image/unauthorized_user_avatar.jpg';
-});
+/**
+ * 使用 computed 计算时 userStore.avatar 并不会触发 re-render
+ */
+const defaultAvatar = '/image/unauthorized_user_avatar.jpg';
+const avatar = ref(defaultAvatar);
+onMounted(() => { avatar.value = userStore.avatar || defaultAvatar; })
+watch(() => userStore.avatar, (val) => { avatar.value = val || defaultAvatar; });
 
 const hasAuthentication = () => {
     if (!userStore.isAuthenticated) {
