@@ -11,7 +11,9 @@
             Mingle Flow = Топтық ынтымақтастық + Процесті басқару
         </p>
         <div class="auth-btns">
-            <a-button type="primary" @click="$router.push(userStore.isAuthenticated ? '' : '/auth/login')">Бастау</a-button>
+            <a-button type="primary" @click="$router.push(userStore.isAuthenticated ? '/main' : '/auth/login')">
+                Бастау
+            </a-button>
             <a-button @click="$router.push('/auth/login')">Тіркелу</a-button>
         </div>
     </section>
