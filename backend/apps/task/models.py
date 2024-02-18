@@ -1,6 +1,7 @@
 from django.db import models
 
 class TaskPriority(models.IntegerChoices):
+    NONE = 0
     LOW = 1
     MEDIUM = 2
     HIGH = 3
@@ -11,7 +12,7 @@ class Task(models.Model):
     description = models.CharField(
         max_length=500, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
     start_time = models.DateTimeField(verbose_name='Бастау уақыт')
-    end_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
+    due_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
     priority = models.IntegerField(choices=TaskPriority.choices, verbose_name='Басымдық')
     tags = models.CharField(max_length=520, verbose_name='Тег')
     finish_time = models.DateTimeField(null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
