@@ -1,18 +1,12 @@
-from django.core.handlers.wsgi import WSGIRequest
-from utils.data import serialized_data
+from rest_framework import serializers
+from project.models import Project, Contributor, ProjectStatuses
+
+from utils.custom_exception import CustomException
 
 
-def project_serializer(request: WSGIRequest, project_model):
-    return serialized_data(request, project_model, {'is_multiple': False})
+class ProjectSerializer(serializers.ModelField):
+    pass
 
 
-def project_list_serializer(request: WSGIRequest, project_model_list):
-    return serialized_data(request, project_model_list)
-
-
-def contributor_serializer(request: WSGIRequest, contributor_model):
-    return serialized_data(request, contributor_model, {'is_multiple': False})
-
-
-def contributor_list_serializer(request: WSGIRequest, contributor_model_list):
-    return serialized_data(request, contributor_model_list)
+class ContributorSerializer(serializers.ModelField):
+    pass

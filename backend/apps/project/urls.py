@@ -1,13 +1,17 @@
-from django.conf.urls import url
-# from project.views import ProjectAPI, ContributorAPI
 
+from rest_framework import routers
+from django.conf import settings
 
-urlpatterns = [
-    # url(r'^project/$', ProjectAPI.as_view()),
-    # url(r'^contributor/$', ContributorAPI.as_view()),
+from project.views import ProjectViewSet, ContributorViewSet
 
-    #     url(r'^user/notification/$', NotificationView.as_view()),
-    #     url(r'^user/notification/(?P<id>\d+)/$', NotificationSingleView.as_view()),
-]
+if settings.DEBUG:
+    router = routers.DefaultRouter()
+else:
+    router = routers.SimpleRouter()
+
+router.register(r'project', ProjectViewSet)
+router.register(r'contributor', ContributorViewSet)
+
+urlpatterns = router.urls
 
 app_name = 'project'
