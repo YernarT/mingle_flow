@@ -2,35 +2,28 @@
   max-width: 1620px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 16%;
-  padding-right: 16%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 @media screen and (max-width: 1400px) {
   .itisit-container {
-    padding-left: 14%;
-    padding-right: 14%;
+    padding-left: 8%;
+    padding-right: 8%;
   }
 }
 
 @media screen and (max-width: 1200px) {
   .itisit-container {
-    padding-left: 12%;
-    padding-right: 12%;
+    padding-left: 6%;
+    padding-right: 6%;
   }
 }
 
 @media screen and (max-width: 992px) {
   .itisit-container {
-    padding-left: 10%;
-    padding-right: 10%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .itisit-container {
-    padding-left: 8%;
-    padding-right: 8%;
+    padding-left: 4%;
+    padding-right: 4%;
   }
 }
 
