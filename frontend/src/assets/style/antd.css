@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.ant-btn[data-icon] {
+  padding: 4px;
+}
+
 .ant-popconfirm .ant-popconfirm-buttons .ant-btn {
   padding: 0 8px;
   display: flex;
