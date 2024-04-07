@@ -5,6 +5,7 @@
   /* 调色盘 */
   --c-primary: rgb(255, 66, 122);
   --c-success: #52c41a;
+  --c-warning: #faad14;
   --c-error: #ff4d4f;
   --c-border: rgb(29, 36, 71);
   --c-background: rgb(253, 253, 255);
@@ -16,7 +17,6 @@
 
   /* 过渡贝塞尔曲线 */
   --transition: 340ms cubic-bezier(0.4, 0, 0.2, 1);
-
   /* Shape */
   --border-radius: 8px;
 }
