@@ -21,44 +21,40 @@
         <span class="date">{{ startDate }}</span>
       </div>
 
-      <div class="task-member">
-        <div class="task-member__item">
-          <span class="value">93</span>
+      <div class="task-worker">
+        <div class="task-worker__item">
+          <span class="value">{{ project.taskCount }}</span>
           <span class="label">Тапсырма</span>
         </div>
-        <div class="task-member__split"></div>
-        <div class="task-member__item">
-          <span class="value">461</span>
+        <div class="task-worker__split"></div>
+        <div class="task-worker__item">
+          <span class="value">{{ project.contributorCount }}</span>
           <span class="label">Мүше</span>
         </div>
       </div>
     </div>
 
-    <div class="members">
-      <span class="members__title">Мүшелер</span>
+    <div class="contributor-list">
+      <span class="contributor-list__title">Мүшелер</span>
 
-      <a-avatar-group
-        :max-count="7"
-        :max-style="{ color: '#f56a00', backgroundColor: '#fde3cf' }"
-      >
+      <a-avatar-group>
         <a-avatar
-          v-for="i in 'aksdjbkjasbdkabdk'"
-          style="background-color: #1890ff"
+          v-for="{ user } in project.contributorList"
+          :key="user.id"
           :size="28"
+          :src="user.avatar ?? user.fullname"
         >
-          K
+          {{ user.fullname[0] }}
         </a-avatar>
-        <a-tooltip title="Ant User" placement="top">
-          <a-avatar style="background-color: #87d068">
-            <template #icon><UserOutlined /></template>
-          </a-avatar>
-        </a-tooltip>
+        <a-avatar v-if="overflowContributorCount > 0" :size="28">
+          {{ overflowContributorCountLabel }}
+        </a-avatar>
       </a-avatar-group>
     </div>
 
     <div class="progress">
       <span class="progress__title"> Прогресс </span>
-      <a-progress :percent="86" strokeColor="var(--c-success)" />
+      <a-progress :percent="project.progress" strokeColor="var(--c-success)" />
     </div>
   </div>
 </template>
@@ -90,6 +86,17 @@ const startDate = computed(() => {
   const day = date.getDate();
 
   return `${day} ${month} ${year}`;
+});
+
+const overflowContributorCount = computed(() => {
+  return project.value.contributorCount - project.value.contributorList.length;
+});
+const overflowContributorCountLabel = computed(() => {
+  if (overflowContributorCount.value < 1000) {
+    return `+${overflowContributorCount.value}`;
+  }
+
+  return `+999`;
 });
 </script>
 
@@ -144,7 +151,7 @@ const startDate = computed(() => {
       }
     }
 
-    .task-member {
+    .task-worker {
       padding: 8px;
       border-radius: var(--border-radius);
       background-color: #f9f9f9;
@@ -173,13 +180,21 @@ const startDate = computed(() => {
     }
   }
 
-  .members {
+  .contributor-list {
     margin-bottom: 8px;
     @include flex($direction: column);
 
     &__title {
       font-size: 16px;
       margin-bottom: 8px;
+    }
+
+    :deep(.ant-avatar) {
+      background-color: var(--c-text);
+
+      .ant-avatar-string {
+        font-size: 14px;
+      }
     }
   }
 
@@ -192,6 +207,10 @@ const startDate = computed(() => {
     :deep(.ant-progress-text) {
       font-size: 16px;
       color: var(--c-text);
+
+      .anticon {
+        color: var(--c-success);
+      }
     }
   }
 }
