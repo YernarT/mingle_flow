@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class TaskPriority(models.IntegerChoices):
     NONE = 0
     LOW = 1
@@ -7,15 +8,28 @@ class TaskPriority(models.IntegerChoices):
     HIGH = 3
     URGENT = 4
 
+
+class TaskStatuses(models.IntegerChoices):
+    BACKLOG = 0
+    ANALYZE = 1
+    DEVELOP = 2
+    TEST = 3
+    FINISH = 4
+
+
 class Task(models.Model):
     name = models.CharField(max_length=40, verbose_name='Тапсырма атауы')
     description = models.CharField(
         max_length=500, null=True, blank=True, verbose_name='Тапсырма сипаттамасы')
     start_time = models.DateTimeField(verbose_name='Бастау уақыт')
     due_time = models.DateTimeField(verbose_name='Аяқтау уақыт')
-    priority = models.IntegerField(choices=TaskPriority.choices, verbose_name='Басымдық')
+    priority = models.IntegerField(
+        choices=TaskPriority.choices, verbose_name='Басымдық')
+    status = models.IntegerField(
+        choices=TaskStatuses.choices, verbose_name='Күй')
     tags = models.CharField(max_length=520, verbose_name='Тег')
-    finish_time = models.DateTimeField(null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
+    finish_time = models.DateTimeField(
+        null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
     project = models.ForeignKey(
         'project.Project', on_delete=models.CASCADE, verbose_name='Жоба')
     creator = models.ForeignKey(
@@ -32,6 +46,7 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class TaskWorker(models.Model):
     task = models.ForeignKey(
@@ -57,7 +72,7 @@ class TaskAttachement(models.Model):
                             null=True, verbose_name='Тіркеме')
     create_time = models.DateTimeField(
         auto_now_add=True, verbose_name='Құрылған уақыт')
-    
+
     class Meta:
         db_table = 'task_attachement'
         verbose_name = 'Тапсырма тіркемесі'
@@ -65,7 +80,8 @@ class TaskAttachement(models.Model):
 
     def __str__(self):
         return self.task.name
-    
+
+
 class TaskComment(models.Model):
     task = models.ForeignKey(
         Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
@@ -74,7 +90,7 @@ class TaskComment(models.Model):
     content = models.CharField(max_length=520, verbose_name='Пікір')
     create_time = models.DateTimeField(
         auto_now_add=True, verbose_name='Құрылған уақыт')
-    
+
     class Meta:
         db_table = 'task_comment'
         verbose_name = 'Тапсырма пікірі'
