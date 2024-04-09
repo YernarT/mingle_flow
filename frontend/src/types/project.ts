@@ -6,6 +6,7 @@ export interface I_ProjectContributor extends I_User {
   project: number;
   canModifyTask: boolean;
   joinTime: string;
+  user: I_User;
 }
 
 export interface I_Project {
@@ -15,5 +16,8 @@ export interface I_Project {
   status: T_ProjectStatus;
   creator: I_User;
   createTime: string;
-  members: I_ProjectContributor[];
+  progress: number;
+  taskCount: number;
+  contributorCount: number;
+  contributorList: I_ProjectContributor[];
 }
