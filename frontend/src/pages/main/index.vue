@@ -70,6 +70,7 @@ const { loading: loadingFetchProjectList, run: fetchProjectList } = useRequest(
 }
 
 .project-list {
+  padding-bottom: 40px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
