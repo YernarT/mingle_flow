@@ -23,8 +23,6 @@
 </template>
 
 <script setup lang="ts">
-// Vue
-import { defineOptions } from "vue";
 // Store
 import { useUser } from "@/stores/user";
 

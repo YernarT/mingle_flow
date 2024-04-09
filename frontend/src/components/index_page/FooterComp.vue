@@ -33,9 +33,6 @@
 </template>
 
 <script setup lang="ts">
-// Vue
-import { defineOptions } from "vue";
-
 defineOptions({ name: "FooterComp" });
 
 const footerElements = [

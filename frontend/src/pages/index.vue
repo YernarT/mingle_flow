@@ -8,9 +8,6 @@
 </template>
 
 <script setup lang="ts">
-// Vue
-import { defineOptions } from "vue";
-
 // Component
 import HeaderComp from "@/components/common/HeaderComp.vue";
 import MainSection from "@/components/index_page/MainSection.vue";

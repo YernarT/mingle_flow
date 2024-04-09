@@ -23,8 +23,6 @@
 </template>
 
 <script setup lang="ts">
-// Vue
-import { defineOptions } from "vue";
 // Constants
 import { PROJECT } from "@/constants/project";
 
