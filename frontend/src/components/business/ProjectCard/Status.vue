@@ -9,9 +9,9 @@
 import type { T_ProjectStatus } from "@/types/project";
 
 // Vue
-import { defineComponent, computed } from "vue";
+import { computed } from "vue";
 
-defineComponent({ name: "ProjectStatus" });
+defineOptions({ name: "ProjectStatus" });
 
 const props = defineProps<{ status: T_ProjectStatus }>();
 

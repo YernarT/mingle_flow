@@ -1,13 +1,13 @@
 <template>
-    <div class="heading">
-        <!-- <p>Сізде <strong>{{ notifications.length }}</strong> хабарландыру бар</p> -->
-        <!-- <a-button :loading="loadingGetNotification" @click="getNotification">Жаңарту</a-button> -->
-    </div>
+  <div class="heading">
+    <!-- <p>Сізде <strong>{{ notifications.length }}</strong> хабарландыру бар</p> -->
+    <!-- <a-button :loading="loadingGetNotification" @click="getNotification">Жаңарту</a-button> -->
+  </div>
 
-    <ul class="notifications">
-        <!-- <ForwardRequestCard v-for="notification in notifications" :key="notification.id" :forward-request="notification"
+  <ul class="notifications">
+    <!-- <ForwardRequestCard v-for="notification in notifications" :key="notification.id" :forward-request="notification"
             @change="handleChangeFR" /> -->
-    </ul>
+  </ul>
 </template>
 
 <script setup lang="ts">
@@ -15,13 +15,13 @@
 // import type { I_ForwardRequest } from "types/cargo";
 
 // Hook
-import useRequest from 'vue-hooks-plus/es/useRequest';
+import useRequest from "vue-hooks-plus/es/useRequest";
 // API
 // import { API_GetNotification } from '~/service/api/cargo-api';
 // Component
 // import ForwardRequestCard from "~/components/cargo/ForwardRequestCard.vue";
 
-defineComponent({ name: 'ProfileNotification' });
+defineOptions({ name: "ProfileNotification" });
 
 // const notifications = ref<I_ForwardRequest[]>([]);
 
@@ -45,16 +45,16 @@ defineComponent({ name: 'ProfileNotification' });
 @import "~/assets/style/mixins.scss";
 
 .heading {
-    width: 100%;
-    margin-bottom: 20px;
-    @include flex($justifyContent: space-between, $alignItems: center);
+  width: 100%;
+  margin-bottom: 20px;
+  @include flex($justifyContent: space-between, $alignItems: center);
 
-    strong {
-        font-weight: 500;
-    }
+  strong {
+    font-weight: 500;
+  }
 }
 
 .notifications {
-    @include flex($direction: column, $gap: 20px);
+  @include flex($direction: column, $gap: 20px);
 }
 </style>

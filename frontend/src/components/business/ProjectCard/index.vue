@@ -64,14 +64,14 @@
 import type { I_Project } from "@/types/project";
 
 // Vue
-import { defineComponent, toRefs, computed } from "vue";
+import { toRefs, computed } from "vue";
 // Utils
 import getMonthName from "@/utils/getMonthName";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
 // Component
 import Status from "@/components/business/ProjectCard/Status.vue";
 
-defineComponent({ name: "ProjectCard" });
+defineOptions({ name: "ProjectCard" });
 
 const props = defineProps<{ project: I_Project }>();
 

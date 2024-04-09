@@ -26,7 +26,7 @@
 import type { I_Project } from "~/types/project";
 
 // Vue
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 // Hooks
 import { useRequest } from "vue-hooks-plus";
 // API
@@ -36,7 +36,7 @@ import HeaderComp from "@/components/common/HeaderComp.vue";
 import FilterSort from "@/components/main_page/FilterSort.vue";
 import ProjectCard from "@/components/business/ProjectCard/index.vue";
 
-defineComponent({ name: "MainPage" });
+defineOptions({ name: "MainPage" });
 
 const projectList = ref<I_Project[]>([]);
 

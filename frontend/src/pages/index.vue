@@ -9,13 +9,13 @@
 
 <script setup lang="ts">
 // Vue
-import { defineComponent } from 'vue';
+import { defineOptions } from "vue";
 
 // Component
-import HeaderComp from '@/components/common/HeaderComp.vue';
-import MainSection from '@/components/index_page/MainSection.vue';
-import DesignSection from '@/components/index_page/DesignSection.vue';
-import FooterComp from '@/components/index_page/FooterComp.vue';
+import HeaderComp from "@/components/common/HeaderComp.vue";
+import MainSection from "@/components/index_page/MainSection.vue";
+import DesignSection from "@/components/index_page/DesignSection.vue";
+import FooterComp from "@/components/index_page/FooterComp.vue";
 
-defineComponent({ name: 'IndexPage' });
+defineOptions({ name: "IndexPage" });
 </script>
