@@ -42,7 +42,7 @@
           v-for="{ user } in project.contributorList"
           :key="user.id"
           :size="28"
-          :src="user.avatar ?? user.fullname"
+          :src="user.avatar"
         >
           {{ user.fullname[0] }}
         </a-avatar>
