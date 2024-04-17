@@ -33,7 +33,11 @@ class Task(models.Model):
     project = models.ForeignKey(
         'project.Project', on_delete=models.CASCADE, verbose_name='Жоба')
     creator = models.ForeignKey(
-        'user.User', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Тапсыпма құрушы')
+        'user.User', on_delete=models.SET_NULL,
+        null=True, blank=True, verbose_name='Тапсыпма құрушы')
+    worker = models.ForeignKey('user.User', on_delete=models.SET_NULL,
+                               related_name='tasks',
+                               null=True, blank=True, verbose_name='Жауапты мүше')
     update_time = models.DateTimeField(
         auto_now=True, verbose_name='Жаңартылған уақыт')
     create_time = models.DateTimeField(
@@ -46,21 +50,6 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class TaskWorker(models.Model):
-    task = models.ForeignKey(
-        Task, on_delete=models.CASCADE, verbose_name='Тапсырма')
-    worker = models.ForeignKey(
-        'user.User', on_delete=models.CASCADE, verbose_name='Жауапты мүше')
-
-    class Meta:
-        db_table = 'task_workder'
-        verbose_name = 'Жауапты мүше'
-        verbose_name_plural = 'Жауапты мүшелер'
-
-    def __str__(self):
-        return self.task.name
 
 
 class TaskAttachement(models.Model):

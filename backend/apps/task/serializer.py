@@ -1,20 +1,13 @@
 from rest_framework import serializers
 
 from user.serializer import UserSerializer
-from task.models import Task, TaskWorker, TaskAttachement, TaskComment
+from task.models import Task, TaskAttachement, TaskComment
 
 
 class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = '__all__'
-
-
-class TaskWorkerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TaskWorker
         fields = '__all__'
 
 
