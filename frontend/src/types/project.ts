@@ -3,6 +3,7 @@ import type { I_User } from "@/types/user";
 export type T_ProjectStatus = 0 | 1 | 2 | 3;
 
 export interface I_ProjectContributor extends I_User {
+  id: number;
   project: number;
   canModifyTask: boolean;
   joinTime: string;
