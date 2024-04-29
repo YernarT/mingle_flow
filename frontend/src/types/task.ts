@@ -33,7 +33,7 @@ export interface I_Task {
   finishTime: string;
   project: I_Project;
   creator: I_User;
-  worker: I_User;
+  worker: I_User | null;
   updateTime: string;
   createTime: string;
   commentList: I_TaskComment[];
