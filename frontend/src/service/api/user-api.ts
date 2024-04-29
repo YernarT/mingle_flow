@@ -28,3 +28,13 @@ export const API_GetUserList = (): Promise<I_Response<I_User[]>> =>
 
 export const API_DeleteUser = (userId: number): Promise<I_Response<null>> =>
   _fetch.delete(`/user/${userId}/`);
+
+export const API_FectchUserList = (
+  fullname?: string
+): Promise<I_Response<I_User[]>> => {
+  let endpoint = "/user/";
+  if (fullname) {
+    endpoint += `?fullname=${fullname}`;
+  }
+  return _fetch.get(endpoint);
+};
