@@ -34,6 +34,17 @@ class UserViewSet(ModelViewSet):
 
         return context
 
+    def get_queryset(self):
+        if self.action == 'list':
+            fullname = self.request.query_params.get('fullname')
+
+            if not fullname:
+                return super().get_queryset()[:50]
+
+            return User.objects.filter(fullname__icontains=fullname)[:50]
+
+        return super().get_queryset()
+
     def create(self, request, *args, **kwargs):
         """
         创建玩家后, 携带返回 `token` 令牌
