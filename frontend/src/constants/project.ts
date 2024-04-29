@@ -40,4 +40,23 @@ export const PROJECT = {
       value: "progress",
     },
   ],
+
+  statuses: [
+    {
+      label: "Жоспарлауда",
+      value: 0,
+    },
+    {
+      label: "Орындалуда",
+      value: 1,
+    },
+    {
+      label: "Күтуде",
+      value: 2,
+    },
+    {
+      label: "Аяқталды",
+      value: 3,
+    },
+  ],
 };
