@@ -3,7 +3,11 @@
     <HeaderComp />
 
     <div class="itisit-container actions">
-      <a-button class="add-prj-btn" type="primary">
+      <a-button
+        class="add-prj-btn"
+        type="primary"
+        @click="projectDrawer.isOpen = true"
+      >
         <Icon name="material-symbols:add-rounded" />
         Жаңа жоба
       </a-button>
@@ -11,11 +15,24 @@
       <FilterSort />
     </div>
 
+    <ProjectDrawer
+      :isOpen="projectDrawer.isOpen"
+      :project="projectDrawer.project"
+      @close="projectDrawer.isOpen = false"
+      @create="handleCreateProject"
+    />
+
     <div class="itisit-container project-list">
       <ProjectCard
         v-for="project in projectList"
         :key="project.id"
         :project="project"
+        @edit="
+          (project) => {
+            projectDrawer.project = project;
+            projectDrawer.isOpen = true;
+          }
+        "
       />
     </div>
   </main>
@@ -35,9 +52,14 @@ import { API_FetchProjectList } from "@/service/api/project-api";
 import HeaderComp from "@/components/common/HeaderComp.vue";
 import FilterSort from "@/components/main_page/FilterSort.vue";
 import ProjectCard from "@/components/business/ProjectCard/index.vue";
+import ProjectDrawer from "@/components/business/ProjectDrawer.vue";
 
 defineOptions({ name: "MainPage" });
 
+const projectDrawer = ref<{ isOpen: boolean; project: I_Project | null }>({
+  isOpen: false,
+  project: null,
+});
 const projectList = ref<I_Project[]>([]);
 
 const { loading: loadingFetchProjectList, run: fetchProjectList } = useRequest(
@@ -48,6 +70,11 @@ const { loading: loadingFetchProjectList, run: fetchProjectList } = useRequest(
     },
   }
 );
+
+const handleCreateProject = (project: I_Project) => {
+  projectList.value.unshift(project);
+  projectDrawer.value.isOpen = false;
+};
 </script>
 
 <style scoped lang="scss">
