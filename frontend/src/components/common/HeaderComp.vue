@@ -38,19 +38,19 @@ import { ref, watch } from "vue";
 // Router
 import { useRouter } from "vue-router";
 // Store
-import { useUser } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 // Antd
 import { message as AntdMessage } from "ant-design-vue";
 
 defineOptions({ name: "HeaderComp" });
 
-const userStore = useUser();
+const userStore = useUserStore();
 const $router = useRouter();
 
 /**
  * 使用 computed 计算时 userStore.avatar 并不会触发 re-render
  */
-const defaultAvatar = "/image/unauthorized_user_avatar.jpg";
+const defaultAvatar = "/image/unauthorized_user_avatar.png";
 const avatar = ref(defaultAvatar);
 onMounted(() => {
   avatar.value = userStore.avatar || defaultAvatar;

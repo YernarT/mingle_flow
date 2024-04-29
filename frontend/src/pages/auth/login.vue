@@ -47,7 +47,7 @@ import { ref } from "vue";
 // // Vue Router
 import { useRouter } from "vue-router";
 // // Store
-import { useUser } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 // // API
 import { API_Login } from "~/service/api/user-api";
 // // Hooks
@@ -59,7 +59,7 @@ import AuthTemplate from "@/components/common/AuthTemplate.vue";
 
 defineOptions({ name: "LoginPage" });
 
-const user = useUser();
+const userStore = useUserStore();
 const router = useRouter();
 
 const loginForm = ref({
@@ -73,7 +73,7 @@ const onFinish = (values: any) => {
   runAsync(values)
     .then(({ data }) => {
       localStorage.set("user", data);
-      user.$state = data;
+      userStore.$state = data;
       AntdMessage.success("Қош келдіңіз!");
       router.replace("/profile");
     })

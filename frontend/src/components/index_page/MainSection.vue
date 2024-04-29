@@ -24,11 +24,11 @@
 
 <script setup lang="ts">
 // Store
-import { useUser } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
 
 defineOptions({ name: "MainSection" });
 
-const userStore = useUser();
+const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss">
