@@ -1,10 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.views import APIView
-from rest_framework.response import Response
-
 
 from project.models import Project, Contributor
-from user.models import User
 from project.serializer import ProjectSerializer, ContributorSerializer
 
 from utils.authentication import LoginRequiredAuthentication
@@ -18,6 +14,12 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     authentication_classes = [LoginRequiredAuthentication]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+
+        return context
+
 
 class ContributorViewSet(ModelViewSet):
     """
@@ -26,3 +28,9 @@ class ContributorViewSet(ModelViewSet):
     queryset = Contributor.objects.all()
     serializer_class = ContributorSerializer
     authentication_classes = [LoginRequiredAuthentication]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({'request': self.request})
+
+        return context
