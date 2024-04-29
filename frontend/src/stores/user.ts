@@ -16,8 +16,8 @@ export const defaultUserState: I_User = {
   token: "",
 };
 
-export const useUser = defineStore("user", {
-  state() {
+export const useUserStore = defineStore("userStore", {
+  state: (): I_User => {
     return defaultUserState;
   },
 
@@ -25,10 +25,7 @@ export const useUser = defineStore("user", {
     initUserFromLocal() {
       if (!window) return;
       const user = localStorage.get("user", defaultUserState) as I_User;
-
-      if (!_.isEqual(user, defaultUserState)) {
-        this.$state = user;
-      }
+      this.$state = user;
     },
 
     logout() {
