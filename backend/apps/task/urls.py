@@ -1,11 +1,18 @@
-from django.conf.urls import url
-# from task.views import TaskAPI, TaskResultAPI, TaskReportAPI
 
+from rest_framework import routers
+from django.conf import settings
 
-urlpatterns = [
-#     url(r'^task/$', TaskAPI.as_view()),
-#     url(r'^task/submission/$', TaskResultAPI.as_view()),
-#     url(r'^task/report/$', TaskReportAPI.as_view()),
-]
+from task.views import TaskViewSet, TaskAttachementViewSet, TaskCommentViewSet
+
+if settings.DEBUG:
+    router = routers.DefaultRouter()
+else:
+    router = routers.SimpleRouter()
+
+router.register(r'task', TaskViewSet)
+router.register(r'task-attachement', TaskAttachementViewSet)
+router.register(r'task-comment', TaskCommentViewSet)
+
+urlpatterns = router.urls
 
 app_name = 'task'
