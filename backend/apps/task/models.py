@@ -31,7 +31,8 @@ class Task(models.Model):
     finish_time = models.DateTimeField(
         null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
     project = models.ForeignKey(
-        'project.Project', on_delete=models.CASCADE, verbose_name='Жоба')
+        'project.Project', on_delete=models.CASCADE,
+        related_name='tasks', verbose_name='Жоба')
     creator = models.ForeignKey(
         'user.User', on_delete=models.SET_NULL,
         null=True, blank=True, verbose_name='Тапсыпма құрушы')
