@@ -4,11 +4,15 @@
       <h3 class="name">{{ project.name }}</h3>
 
       <div class="actions">
-        <a-button data-icon>
+        <!-- @click="emit('edit', project)" -->
+        <a-button v-if="isCreator" data-icon>
           <Icon name="material-symbols:edit" />
         </a-button>
-        <a-button data-icon>
-          <Icon name="mdi:dots-vertical" />
+        <a-button
+          data-icon
+          @click="$router.push(`/task?project=${project.id}`)"
+        >
+          <Icon name="material-symbols:arrow-forward-rounded" />
         </a-button>
       </div>
     </div>
@@ -65,6 +69,8 @@ import type { I_Project } from "@/types/project";
 
 // Vue
 import { toRefs, computed } from "vue";
+// Store
+import { useUserStore } from "@/stores/user";
 // Utils
 import getMonthName from "@/utils/getMonthName";
 import capitalizeFirstLetter from "@/utils/capitalizeFirstLetter";
@@ -73,9 +79,13 @@ import Status from "@/components/business/ProjectCard/Status.vue";
 
 defineOptions({ name: "ProjectCard" });
 
+const emit = defineEmits<{
+  (event: "edit", project: I_Project): void;
+}>();
 const props = defineProps<{ project: I_Project }>();
 
 const { project } = toRefs(props);
+const userStore = useUserStore();
 
 const startDate = computed(() => {
   const date = new Date(project.value.createTime);
@@ -86,6 +96,10 @@ const startDate = computed(() => {
   const day = date.getDate();
 
   return `${day} ${month} ${year}`;
+});
+
+const isCreator = computed(() => {
+  return userStore.id === project.value.creator.id;
 });
 
 const overflowContributorCount = computed(() => {
