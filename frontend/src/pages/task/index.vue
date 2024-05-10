@@ -9,11 +9,22 @@
         </Button>
         <h1>{{ project?.name }}</h1>
 
-        <a-button class="add-task-btn" type="primary">
+        <a-button
+          class="add-task-btn"
+          type="primary"
+          @click="taskDrawer.isOpen = true"
+        >
           <Icon name="material-symbols:add-rounded" />
           Жаңа тапсырма
         </a-button>
       </div>
+
+      <TaskDrawer
+        :isOpen="taskDrawer.isOpen"
+        :task="taskDrawer.task"
+        @close="taskDrawer.isOpen = false"
+        @create="handleCreateTask"
+      />
 
       <div class="filter-block">
         <span class="hint">Сүзгілер: </span>
@@ -52,6 +63,7 @@ import { API_FetchTaskList } from "@/service/api/task-api";
 import { Button } from "ant-design-vue";
 import HeaderComp from "@/components/common/HeaderComp.vue";
 import TaskKanban from "@/components/business/TaskKanban.vue";
+import TaskDrawer from "@/components/business/TaskDrawer.vue";
 // Constants
 import { TASK } from "@/constants/task";
 
@@ -72,6 +84,11 @@ const taskList = ref<{
   develop: [],
   test: [],
   finish: [],
+});
+
+const taskDrawer = ref<{ isOpen: boolean; task: I_Task | null }>({
+  isOpen: false,
+  task: null,
 });
 
 const { runAsync: fetchProject, loading: loaingFetchProject } = useRequest(
@@ -95,6 +112,10 @@ onBeforeMount(async () => {
   project.value = (await fetchProject(Number(projectId))).data;
   taskList.value = (await fetchTaskList(project.value.id)).data;
 });
+
+const handleCreateTask = (task: I_Task) => {
+  console.log("handleCreateTask: ", task);
+};
 </script>
 
 <style scoped lang="scss">
