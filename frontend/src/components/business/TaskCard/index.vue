@@ -48,6 +48,7 @@ const props = defineProps<{
   border-radius: var(--border-radius);
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+  cursor: move;
   @include flex($direction: column);
 
   .head {
