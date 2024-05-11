@@ -15,7 +15,7 @@ class TaskSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['creator'] = UserSerializer(instance=instance.creator, context=self.context).data
         data['project'] = ProjectSerializer(instance=instance.project, context=self.context).data
-        data['tags'] = instance.tags.join(',')
+        data['tags'] = instance.tags if instance.tags.split(',') else []
         if instance.worker:
             data['worker'] = UserSerializer(instance=instance.worker, context=self.context).data
         attachement_list = TaskAttachement.objects.filter(task=instance)
