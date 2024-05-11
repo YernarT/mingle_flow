@@ -27,7 +27,7 @@ class Task(models.Model):
         choices=TaskPriority.choices, verbose_name='Басымдық')
     status = models.IntegerField(
         choices=TaskStatuses.choices, verbose_name='Күй')
-    tags = models.CharField(max_length=520, verbose_name='Тег')
+    tags = models.CharField(max_length=520, blank=True, verbose_name='Тег')
     finish_time = models.DateTimeField(
         null=True, blank=True, default=None, verbose_name='Тапсырма аяқталған уақыт')
     project = models.ForeignKey(
