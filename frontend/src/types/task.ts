@@ -1,5 +1,6 @@
 import type { I_User } from "@/types/user";
 import type { I_Project } from "@/types/project";
+import type { Dayjs } from "dayjs";
 
 export type T_Filter = "all" | "created" | "assigned";
 
@@ -38,4 +39,17 @@ export interface I_Task {
   createTime: string;
   commentList: I_TaskComment[];
   attachementList: I_TaskAttachement[];
+}
+
+export interface I_Task_Create {
+  name: string;
+  description: string;
+  startTime: string | null;
+  dueTime: string | null;
+  dataRange: [Dayjs | null, Dayjs | null];
+  priority: T_TaskPriority;
+  status: T_TaskStatus;
+  tags: string[];
+  project: I_Project["id"] | null;
+  worker: I_User | null;
 }
