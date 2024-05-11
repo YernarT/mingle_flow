@@ -12,6 +12,7 @@
     "@pinia/nuxt": "^0.4.11",
     "@vueuse/core": "^10.6.1",
     "ant-design-vue": "^4.0.3",
+    "dayjs": "^1.11.11",
     "lodash": "^4.17.21",
     "pinia": "^2.1.4",
     "vue": "^3.3.4",
