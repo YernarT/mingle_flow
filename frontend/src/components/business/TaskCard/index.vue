@@ -4,7 +4,7 @@
       <span class="name">{{ props.task.name }}</span>
       <img
         v-if="props.task.worker"
-        class="worker"
+        class="avatar"
         :src="props.task.worker.avatar || defaultAvatar"
         :title="props.task.worker.fullname"
       />
@@ -62,8 +62,8 @@ const props = defineProps<{
     }
 
     .avatar {
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       object-fit: cover;
     }
