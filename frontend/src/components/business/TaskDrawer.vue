@@ -64,7 +64,7 @@
             <a-select
               v-model:value="formState.project"
               showArrow
-              :options="contributorList"
+              :options="projectList"
               placeholder="Жоба іздеу"
             >
               <template #notFoundContent>
@@ -127,12 +127,12 @@ import { useUserStore } from "@/stores/user";
 import { useRequest } from "vue-hooks-plus";
 // API
 import { API_FectchUserList } from "@/service/api/user-api";
+import { API_FetchProjectList } from "@/service/api/project-api";
 import { API_CreateTask } from "@/service/api/task-api";
 import { message } from "ant-design-vue";
 // Constants
 import { PROJECT } from "~/constants/project";
 import { TASK } from "~/constants/task";
-import { values } from "lodash";
 
 defineOptions({ name: "TaskDrawer" });
 
@@ -148,6 +148,7 @@ const props = defineProps<{
 
 const userStore = useUserStore();
 const contributorList = ref<I_User[]>([]);
+const projectList = ref<I_Project[]>([]);
 const formState = ref<I_Task_Create>({
   name: "",
   description: "",
@@ -178,6 +179,18 @@ const checkDataRange = async (_: any, value: []) => {
   }
   return Promise.resolve();
 };
+
+useRequest(API_FetchProjectList, {
+  onSuccess(response) {
+    projectList.value = response.data.map((project) => {
+      // @ts-ignore
+      project.label = project.name;
+      // @ts-ignore
+      project.value = project.id;
+      return project;
+    });
+  },
+});
 
 useRequest(API_FectchUserList, {
   onSuccess(response) {
