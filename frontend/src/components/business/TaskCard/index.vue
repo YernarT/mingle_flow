@@ -1,5 +1,5 @@
 <template>
-  <div class="task-card">
+  <div draggable="true" class="task-card">
     <div class="head">
       <span class="name">{{ props.task.name }}</span>
       <img
@@ -16,11 +16,7 @@
         {{ props.task.attachementList.length }}
       </div>
 
-      <a-button
-        data-icon
-        class="in-btn"
-        @click="$router.push(`/task/${task.id}`)"
-      >
+      <a-button data-icon class="in-btn">
         <Icon name="material-symbols:arrow-right-alt-rounded" />
       </a-button>
     </footer>
@@ -49,6 +45,7 @@ const props = defineProps<{
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
   cursor: move;
+  transform: box-shadow var(--transition);
   @include flex($direction: column);
 
   .head {
