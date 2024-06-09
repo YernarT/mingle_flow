@@ -41,7 +41,13 @@
       </div>
     </div>
 
-    <TaskKanban class="itisit-container" :taskList="taskList" />
+    <ClientOnly>
+      <TaskKanban
+        class="itisit-container"
+        :taskList="taskList"
+        @changeState="(task, status) => updateTask(task.id, { status })"
+      />
+    </ClientOnly>
   </main>
 </template>
 
@@ -58,14 +64,16 @@ import { useRoute } from "vue-router";
 import { useRequest } from "vue-hooks-plus";
 // API
 import { API_FetchProject } from "@/service/api/project-api";
-import { API_FetchTaskList } from "@/service/api/task-api";
+import { API_FetchTaskList, API_UpdateTask } from "@/service/api/task-api";
 // Component
-import { Button } from "ant-design-vue";
+import { Button, message } from "ant-design-vue";
 import HeaderComp from "@/components/common/HeaderComp.vue";
 import TaskKanban from "@/components/business/TaskKanban.vue";
 import TaskDrawer from "@/components/business/TaskDrawer.vue";
 // Constants
 import { TASK } from "@/constants/task";
+// Utils
+import _ from "lodash";
 
 defineOptions({ name: "TaskPage" });
 
@@ -101,6 +109,17 @@ const { runAsync: fetchTaskList, loading: loadingFetchTaskList } = useRequest(
   { manual: true }
 );
 
+const { run: updateTask, loading: loadingUpdateTask } = useRequest(
+  API_UpdateTask,
+  {
+    manual: true,
+    onSuccess(response) {
+      message.success("Өзгеріс сақталды");
+      taskDrawer.value.isOpen = false;
+    },
+  }
+);
+
 onBeforeMount(async () => {
   const projectId = route.query.project;
   // not providing project id || project id is not number
@@ -114,7 +133,14 @@ onBeforeMount(async () => {
 });
 
 const handleCreateTask = (task: I_Task) => {
-  console.log("handleCreateTask: ", task);
+  // @ts-ignore
+  const statusKey = _.findKey(
+    TASK.status,
+    (statusValue) => statusValue === task.status
+  );
+  // @ts-ignore
+  taskList.value[statusKey].unshift(task);
+  taskDrawer.value.isOpen = false;
 };
 </script>
 
