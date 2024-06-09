@@ -22,3 +22,10 @@ export function API_CreateTask(
 ): Promise<I_Response<I_Task>> {
   return _fetch.post("/task/", payload);
 }
+
+export function API_UpdateTask(
+  taskId: number,
+  payload: Partial<I_Task>
+): Promise<I_Response<I_Task>> {
+  return _fetch.patch(`/task/${taskId}/`, payload);
+}
